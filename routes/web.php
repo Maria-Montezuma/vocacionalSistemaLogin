@@ -9,6 +9,7 @@ Route::get('/', [AuthController::class, 'showRegistrationForm'])->name('registro
 
 // Procesar el registro
 Route::post('registro', [AuthController::class, 'register'])->name('registro.submit');
+Route::get('/registro', [AuthController::class, 'showRegistrationForm'])->name('registro');
 
 // Mostrar formulario de login
 Route::get('login', [AuthController::class, 'showLoginForm'])->name('login');

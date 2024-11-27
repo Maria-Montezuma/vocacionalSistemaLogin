@@ -104,7 +104,8 @@ class AuthController extends Controller
         }
 
         // Redirigir al usuario a la página de perfil o login después del registro
-        return redirect()->route('perfil');
+        return redirect()->route('registro');
+        // return redirect()->route('registro')->with('success', 'Registro completado exitosamente');
     }
     public function showLoginForm()
 {
