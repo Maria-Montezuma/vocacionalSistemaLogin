@@ -1,0 +1,564 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+a {
+    font-size: small;
+    float: right;
+    text-decoration: none;
+    color: rgb(25, 25, 187);
+}
+
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background: #fffcf8;
+    padding: 20px;
+}
+
+.container {
+    position: relative;
+    width: 100%;
+    max-width: 950px; /* Reducido un poco el ancho */
+    height: 480px;  /* Reducida ligeramente la altura */
+    margin: 20px auto;
+    box-shadow: 4px 4px 15px rgba(0, 0, 0, 0.291);
+}
+
+.form-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 50%;
+    height: 100%;
+    background: #fff;
+    border-radius: 10px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    transition: all 0.6s ease-in-out;
+}
+
+/* Cuando está activo, mueve el form-container al lado derecho */
+.container.active .form-container {
+    left: 50%;
+}
+
+.form {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    display: block;
+    flex-direction: column;
+    justify-content: center;
+    padding: 20px;  /* Reducido aún más el padding */
+    transition: all 0.6s ease-in-out;
+    overflow-y: hidden;
+}
+
+.signin-form {
+    z-index: 2;
+    opacity: 1;
+}
+
+.signup-form {
+    z-index: 1;
+    opacity: 0;
+    overflow-y: auto;
+}
+
+.container.active .signin-form {
+    opacity: 0;
+    z-index: 1;
+}
+
+.container.active .signup-form {
+    opacity: 1;
+    z-index: 2;
+}
+
+.info-container {
+    position: absolute;
+    top: 0;
+    width: 50%;
+    height: 100%;
+    background: #fff4e3;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start; /* Distribuir los elementos verticalmente */
+    align-items: center; /* Alinear los elementos al centro */
+    padding: 40px;
+    text-align: center;
+    transition: all 0.6s ease-in-out;
+}
+
+
+.info-signin {
+    left: 50%;
+    z-index: 2;
+    background-image: url('/img/principal.svg');
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: contain;
+}
+
+.info-signup {
+    left: 0;
+    z-index: 1;
+    opacity: 0;
+    background-image: url('/img/secundario.svg');
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: contain;
+}
+
+.container.active .info-signin {
+    opacity: 0;
+    z-index: 1;
+}
+
+.container.active .info-signup {
+    opacity: 1;
+    z-index: 2;
+}
+
+/* Estilos para títulos y otros elementos */
+h2 {
+    text-align: center;
+    font-size: 1.5em; /* Mantengo el tamaño del título */
+    margin-bottom: 10px;
+    color: #333;
+}
+
+.line-with-text{
+    padding: .2rem;
+   margin-top: 10px;
+}
+
+.info-container h2 {
+    color: #292929;
+    margin-bottom: 5px; 
+    text-align: center; /* Asegura que el título esté alineado a la izquierda */
+}
+
+
+.row {
+    display: flex;
+    gap: 10px;
+}
+
+.col {
+    flex: 1;
+}
+
+.info-container, p {
+    color: #000000;
+    font-size: 1.2rem;
+}
+
+p{  
+    font-size: 1rem;
+    background: rgba(255, 254, 253, 0.46); 
+    color: #e25604; 
+    border-radius: 10px;
+    border-color: solid;
+}
+h4{
+    color: #2c2b29;
+}
+
+input, textarea, select {
+    width: 100%;
+    padding: 8px;
+    margin: 8px 0;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    outline: none;
+    transition: 0.3s;
+}
+
+input:focus, textarea:focus {
+    border-color: #f17217;
+}
+
+label {
+    color: #666;
+    font-size: 0.9em;
+}
+
+button {
+    padding: 10px 25px;
+    background: #e2740e;
+    color: #ffffff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    margin: auto;
+    margin-top: 15px;
+    transition: 0.3s;
+}
+
+button:hover {
+    background: #f79840;
+}
+
+.social-buttons {
+    display: flex;
+    gap: 10px;
+    margin: 10px 0;
+    justify-content: center;
+}
+
+.social-button {
+    padding: 8px 16px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+    transition: 0.3s;
+    background: #ffffff;
+    color: #333;
+}
+
+.social-button:hover {
+    background: #ffefd7;
+}
+
+
+.toggle-button {
+    background: rgb(255, 247, 237);
+    border: 2px solid #000;
+    color: #000;
+    margin-top: 16rem;
+    justify-items: center;
+}
+
+.toggle-button:hover {
+    background: rgba(245, 131, 60, 0.964);
+    border: 2px solid #fff;
+}
+
+/* En la vista de dispositivos móviles */
+@media screen and (max-width: 768px) {
+    .container {
+        height: auto;
+        min-height: 600px;
+    }
+
+    .form-container {
+        width: 100%;
+        position: relative;
+        transition: none;
+    }
+
+    .container.active .form-container {
+        left: 0;
+    }
+
+    .info-container {
+        width: 100%;
+        height: 200px;
+        position: relative;
+        display: none;
+    }
+
+    .info-signin, .info-signup {
+        left: 0;
+        position: relative;
+    }
+
+    /* Mejora para el formulario */
+    .form {
+        padding: 20px;
+        overflow-y: auto;
+        height: auto;
+        min-height: 100%;
+    }
+
+    .row {
+        flex-direction: column;
+        gap: 0;
+    }
+
+    .social-buttons {
+        flex-direction: column;
+    }
+
+    .social-button {
+        width: 100%;
+        justify-content: center;
+    }
+
+    h2 {
+        font-size: 1.5em;
+    }
+}
+
+
+
+
+
+
+.mobile-only {
+    display: none;
+}
+
+/* Estilos responsivos para pantallas pequeñas */
+@media screen and (max-width: 768px) {
+    .container {
+        height: 100%;
+    }
+
+    .form-container {
+        width: 100%;
+        position: relative;
+        transition: none;
+    }
+
+    .signin-form, .signup-form {
+        position: static;
+        opacity: 1;
+        z-index: 1;
+    }
+
+    .signup-form {
+        display: none;
+    }
+
+    .container.active .signin-form {
+        display: none;
+    }
+
+    .container.active .signup-form {
+        display: block;
+    }
+
+    .mobile-create-account {
+        width: 100%;
+        text-align: center;
+        margin-top: 10px;
+    }
+
+    .mobile-create-account button {
+        padding: 10px 20px;
+        background: #e2740e;
+        color: #ffffff;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 1em;
+        width: auto;
+        transition: 0.3s;
+    }
+
+    .mobile-create-account button:hover {
+        background: #f79840;
+    }
+    .mobile-only {
+        display: block;
+    }
+}
+
+/* Estilos para dispositivos móviles */
+.mobile-only {
+    display: none;
+}
+
+@media screen and (max-width: 768px) {
+    /* Mostrar los botones solo en móviles */
+    .boton-mobile{
+        background: #e2740e;
+    }
+
+    .mobile-create-account, .mobile-back-to-login {
+        display: block;
+    }
+
+    .mobile-create-account button, .mobile-back-to-login button, .boton-mobile {
+        padding: 10px 20px;
+        color: #ffffff;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 1em;
+        width: 100%;
+        margin-top: 1rem;
+        transition: 0.3s;
+        display: inline-block;
+    }
+
+    .mobile-create-account button, .mobile-back-to-login button{
+        background-color:  #6c757d ;
+    }
+
+    .mobile-create-account button:hover, .mobile-back-to-login button:hover {
+        background: #f49d4b;
+    }
+}
+
+.form-wrapper {
+    width: 600px;  /* Ancho fijo */
+    height: 600px; /* Alto fijo para hacerlo cuadrado */
+    padding: 20px;
+    background-color: #ffffff;  /* Fondo blanco */
+    border-radius: 8px;
+    box-shadow: #e2740e; /* Sombra suave */
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+
+/* Menor espacio entre los pasos */
+.step {
+    display: none;
+}
+
+.active-step {
+    display: block;
+}
+
+.step div {
+    margin-bottom: 12px;
+}
+
+/* Ajuste de los botones en un contenedor más pequeño */
+.step {
+    height: auto;  /* Sin scroll, altura ajustable */
+}
+
+/* Estilo para los radio buttons */
+.step label {
+    font-size: 1em;
+    margin: 10px 0;
+    display: flex;
+    align-items: center;
+    gap: 8px; /* Add small gap between radio and text */
+    cursor: pointer; /* Add pointer cursor for better UX */
+}
+
+.step input[type="radio"] {
+    width: 16px; /* Set specific size */
+    height: 16px; /* Set specific size */
+    accent-color: #e2740e; /* Match your theme color */
+}
+
+/* Add hover effect */
+.step label:hover {
+    color: #e2740e;
+}
+
+
+.col {
+    margin-bottom: 5px;
+}
+
+.col label {
+    font-size: 0.9em;
+}
+
+.col input, select {
+    width: 100%;
+    padding: 8px;
+    margin-top: 5px;
+    font-size: 0.9em;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+
+h3 {
+    font-size: 1.1em;
+    margin-bottom: 8px;
+    text-align: center;
+}
+
+.security-select {
+    width: 100%;
+    padding: 10px;
+    margin: 8px 0;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    background-color: white;
+    font-size: 0.9em;
+    color: #333;
+    transition: 0.3s;
+}
+
+.security-select:focus {
+    border-color: #e2740e;
+    outline: none;
+}
+
+.login-button {
+    width: 100%;
+}
+
+.website-preview {
+    margin-top: 10px;
+    display: none;
+}
+
+.website-preview img {
+    max-width: 100%;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.preview-container {
+    margin-top: 10px;
+    display: none;
+}
+
+.url-error {
+    color: #dc3545;
+    font-size: 0.875em;
+    margin-top: 5px;
+    display: none;
+}
+
+.loading-spinner {
+    display: none;
+    color: #666;
+    margin-top: 5px;
+}
+
+.retry-button {
+    background-color: #6c757d;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-top: 10px;
+    display: none;
+}
+
+.retry-button:hover {
+    background-color: #5a6268;
+}
+.line-with-text {
+    display: flex;
+    align-items: center;
+    text-align: center;
+  }
+
+  .line-with-text::before,
+  .line-with-text::after {
+    content: "";
+    flex: 1; /* Hace que las líneas ocupen espacio flexible */
+    border-bottom: 1px solid #ccc; /* Estilo de la línea */
+    margin: 0 10px; /* Espaciado entre las líneas y el texto */
+  }
+
+  .info-text {
+    white-space: nowrap; /* Asegura que el texto no se divida en varias líneas */
+    font-size: 14px;
+    color: #666;}
