@@ -23,13 +23,13 @@
                         <label for="login-email">
                             <i class="fas fa-envelope"></i> Correo Electrónico:
                         </label>
-                        <input type="email" id="login-email" name="email" required>
+                        <input type="email" id="login-email" name="CorreoUsuario" required>
                     </div>
                     <div class="col">
                         <label for="login-password">
                             <i class="fas fa-lock"></i> Contraseña:
                         </label>
-                        <input type="password" id="login-password" name="password" required>.
+                        <input type="password" id="login-password" name="ContrasenaUsuario" required>.
                         <a class="a" href="{{ route('recuperar-contraseña') }}">¿Olvidaste tu contraseña?</a>
                     </div>
                     <button class="boton-mobile" type="submit">Iniciar Sesión</button>

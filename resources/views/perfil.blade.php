@@ -4,42 +4,111 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mi Perfil</title>
-    <link rel="stylesheet" href="{{ asset('css/style.css') }}">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f5f5f5;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .profile-card {
+            background-color: white;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            margin-top: 20px;
+        }
+
+        .profile-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .profile-pic {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            background-color: #ddd;
+            margin-right: 20px;
+        }
+
+        .profile-info h1 {
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        .profile-info p {
+            color: #666;
+        }
+
+        .profile-details {
+            margin-top: 20px;
+        }
+
+        .detail-item {
+            padding: 10px 0;
+            border-bottom: 1px solid #eee;
+        }
+
+        .detail-item:last-child {
+            border-bottom: none;
+        }
+
+        .logout-btn {
+            background-color: #ff4444;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 20px;
+        }
+
+        .logout-btn:hover {
+            background-color: #cc0000;
+        }
+    </style>
 </head>
 <body>
     <div class="container">
-        <header class="profile-header">
-            <h1>Bienvenido, {{ Auth::user()->nombres }} {{ Auth::user()->apellidos }}</h1>
-            <nav class="profile-nav">
-                <ul>
-                    <li><a href="{{ route('perfil') }}">Mi Perfil</a></li>
-                    <li><a href="{{ route('logout') }}">Cerrar Sesión</a></li>
-                </ul>
-            </nav>
-        </header>
+        <div class="profile-card">
+            <div class="profile-header">
+                <div class="profile-pic"></div>
+                <div class="profile-info">
+                    <h1>{{ session('NombreUsuario') }}</h1>
+                    <p>{{ session('CorreoUsuario') }}</p>
+                </div>
+            </div>
 
-        <main class="profile-content">
-            <section class="user-info">
-                <h2>Información Personal</h2>
-                <p><strong>Cédula:</strong> {{ Auth::user()->cedula }}</p>
-                <p><strong>Nacionalidad:</strong> {{ Auth::user()->nacionalidad }}</p>
-                <p><strong>Fecha de Nacimiento:</strong> {{ Auth::user()->fecha_nacimiento }}</p>
-                <p><strong>Correo Electrónico:</strong> {{ Auth::user()->email }}</p>
-                <p><strong>Dirección:</strong> {{ Auth::user()->direccion }}</p>
-                <p><strong>Descripción:</strong> {{ Auth::user()->descripcion }}</p>
-            </section>
+            <div class="profile-details">
+                <div class="detail-item">
+                    <strong>ID de Usuario:</strong> {{ session('idUsuario') }}
+                </div>
+                <div class="detail-item">
+                    <strong>Correo:</strong> {{ session('CorreoUsuario') }}
+                </div>
+                <div class="detail-item">
+                    <strong>Nombre:</strong> {{ session('NombreUsuario') }}
+                </div>
+            </div>
 
-            <section class="profile-actions">
-                <h2>Acciones</h2>
-                <button onclick="alert('Funcionalidad no implementada')">Editar Perfil</button>
-                <button onclick="alert('Funcionalidad no implementada')">Cambiar Contraseña</button>
-            </section>
-        </main>
-
-        <footer class="profile-footer">
-            <p>&copy; {{ date('Y') }} Mi Aplicación. Todos los derechos reservados.</p>
-        </footer>
+            <form action="{{ route('logout') }}" method="POST">
+                @csrf
+                <button type="submit" class="logout-btn">Cerrar Sesión</button>
+            </form>
+        </div>
     </div>
 </body>
 </html>

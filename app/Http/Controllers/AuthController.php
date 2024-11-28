@@ -107,9 +107,42 @@ class AuthController extends Controller
         return redirect()->route('registro');
         // return redirect()->route('registro')->with('success', 'Registro completado exitosamente');
     }
-    public function showLoginForm()
-{
-    return view('login');
-}
+
+
+    public function login(Request $request)
+    {
+        $request->validate([
+            'CorreoUsuario' => 'required|email',
+            'ContrasenaUsuario' => 'required'
+        ]);
+
+        $usuario = Usuario::where('CorreoUsuario', $request->CorreoUsuario)->first();
+
+        if ($usuario && Hash::check($request->ContrasenaUsuario, $usuario->ContrasenaUsuario)) {
+            session([
+                'usuario_id' => $usuario->idUsuario,
+                'usuario_nombre' => $usuario->NombreUsuario,
+                'usuario_email' => $usuario->CorreoUsuario
+            ]);
+            
+            return redirect()->route('perfil');
+        }
+
+        return back()->withErrors([
+            'CorreoUsuario' => 'Credenciales incorrectas'
+        ])->withInput();
+    }
+
+    public function perfil()
+    {
+        return view('perfil');
+    }
+
+    public function logout()
+    {
+        session()->forget(['usuario_id', 'usuario_nombre', 'usuario_email']);
+        return redirect()->route('registro');
+    }
+
 
 }
