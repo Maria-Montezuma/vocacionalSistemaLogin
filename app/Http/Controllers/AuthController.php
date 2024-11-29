@@ -95,68 +95,67 @@ class AuthController extends Controller
     
         // Si la validación falla, redirige con errores
     if ($validator->fails()) {
-        return redirect()->back()->withErrors($validator)->withInput()->with('error', 'Por favor, corrija los errores en el formulario.');
+        return redirect()->back()->withErrors($validator)->withInput();
     }
 
         // Crear el usuario
-        $usuario = Usuario::create([
-            'NombreUsuario' => $request->NombreUsuario,
-            'ApellidoUsuario' => $request->ApellidoUsuario,
-            'CorreoUsuario' => $request->CorreoUsuario,
-            'ContrasenaUsuario' => Hash::make($request->ContrasenaUsuario),
-            'FechaNacimientoUsuario' => $request->FechaNacimientoUsuario,
-            'CedulaUsuario' => $request->CedulaUsuario,
-            'DireccionUsuario' => $request->DireccionUsuario,
-            'DescripcionUsuario' => $request->DescripcionUsuario,
-            'Generos_idGenero' => $request->Generos_idGenero,
-            'Nacionalidades_idNacionalidad' => $request->Nacionalidades_idNacionalidad,
+    $usuario = Usuario::create([
+        'NombreUsuario' => $request->NombreUsuario,
+        'ApellidoUsuario' => $request->ApellidoUsuario,
+        'CorreoUsuario' => $request->CorreoUsuario,
+        'ContrasenaUsuario' => Hash::make($request->ContrasenaUsuario),
+        'FechaNacimientoUsuario' => $request->FechaNacimientoUsuario,
+        'CedulaUsuario' => $request->CedulaUsuario,
+        'DireccionUsuario' => $request->DireccionUsuario,
+        'DescripcionUsuario' => $request->DescripcionUsuario,
+        'Generos_idGenero' => $request->Generos_idGenero,
+        'Nacionalidades_idNacionalidad' => $request->Nacionalidades_idNacionalidad,
+    ]);
+
+    // Crear las redes sociales si existen
+    if ($request->has('sitio_web')) {
+        Redessociale::create([
+            'WebPersonal' => $request->sitio_web,
+            'Usuarios_idUsuario' => $usuario->idUsuario,
         ]);
-
-        // Crear las redes sociales si existen
-        if ($request->has('sitio_web')) {
-            Redessociale::create([
-                'WebPersonal' => $request->sitio_web,
-                'Usuarios_idUsuario' => $usuario->idUsuario,
-            ]);
-        }
-
-        // Registrar redes sociales si son proporcionadas
-        if ($request->has('facebook')) {
-            Redessociale::create([
-                'RedSocial' => 'Facebook',
-                'UrlRedSocial' => $request->facebook,
-                'Usuarios_idUsuario' => $usuario->idUsuario,
-            ]);
-        }
-
-        if ($request->has('instagram')) {
-            Redessociale::create([
-                'RedSocial' => 'Instagram',
-                'UrlRedSocial' => $request->instagram,
-                'Usuarios_idUsuario' => $usuario->idUsuario,
-            ]);
-        }
-
-        if ($request->has('twitter')) {
-            Redessociale::create([
-                'RedSocial' => 'Twitter',
-                'UrlRedSocial' => $request->twitter,
-                'Usuarios_idUsuario' => $usuario->idUsuario,
-            ]);
-        }
-
-        if ($request->has('tiktok')) {
-            Redessociale::create([
-                'RedSocial' => 'TikTok',
-                'UrlRedSocial' => $request->tiktok,
-                'Usuarios_idUsuario' => $usuario->idUsuario,
-            ]);
-        }
-
-        // Redirigir al usuario a la página de perfil o login después del registro
-        return redirect()->route('registro');
-        // return redirect()->route('registro')->with('success', 'Registro completado exitosamente');
     }
+
+    // Registrar redes sociales si son proporcionadas
+    if ($request->has('facebook')) {
+        Redessociale::create([
+            'RedSocial' => 'Facebook',
+            'UrlRedSocial' => $request->facebook,
+            'Usuarios_idUsuario' => $usuario->idUsuario,
+        ]);
+    }
+
+    if ($request->has('instagram')) {
+        Redessociale::create([
+            'RedSocial' => 'Instagram',
+            'UrlRedSocial' => $request->instagram,
+            'Usuarios_idUsuario' => $usuario->idUsuario,
+        ]);
+    }
+
+    if ($request->has('twitter')) {
+        Redessociale::create([
+            'RedSocial' => 'Twitter',
+            'UrlRedSocial' => $request->twitter,
+            'Usuarios_idUsuario' => $usuario->idUsuario,
+        ]);
+    }
+
+    if ($request->has('tiktok')) {
+        Redessociale::create([
+            'RedSocial' => 'TikTok',
+            'UrlRedSocial' => $request->tiktok,
+            'Usuarios_idUsuario' => $usuario->idUsuario,
+        ]);
+    }
+
+    // Redirigir al formulario de registro o mostrar un mensaje de éxito
+    return redirect()->route('registro')->with('success', 'Registro completado exitosamente');
+}
 
 
     public function login(Request $request)

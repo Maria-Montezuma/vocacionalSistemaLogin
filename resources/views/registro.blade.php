@@ -60,7 +60,6 @@
                 </form>
             </div>
 
-
             <!-- Formulario de Registro -->
             <div class="form signup-form">
             <h2>Crear Cuenta</h2>
@@ -400,6 +399,16 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
     </script>
+
+@if(session('success'))
+    <script>
+        Swal.fire({
+            icon: 'success',
+            title: '¡Registro Exitoso!',
+            confirmButtonText: 'Aceptar'
+        });
+    </script>
+@endif
 @if(session('alert'))
     <script>
         Swal.fire({
