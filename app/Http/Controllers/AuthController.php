@@ -9,6 +9,8 @@ use App\Models\Nacionalidade;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\Rule;
+
 
 class AuthController extends Controller
 {
@@ -31,16 +33,30 @@ class AuthController extends Controller
             'CorreoUsuario' => 'required|email|unique:usuarios,CorreoUsuario',
             'ContrasenaUsuario' => 'required|string|min:8|confirmed',
             'FechaNacimientoUsuario' => 'required|date',
-            'CedulaUsuario' => 'required|numeric|unique:usuarios,CedulaUsuario',
+            'Nacionalidades_idNacionalidad' => [
+        'required', 
+        'exists:nacionalidades,idNacionalidad',
+        // Agrega esta nueva regla personalizada
+        function($attribute, $value, $fail)  use ($request) {
+            // Verifica si ya existe un usuario con esta nacionalidad
+            $existingUser = Usuario::where('CorreoUsuario', $request->CorreoUsuario)
+                ->where('Nacionalidades_idNacionalidad', $value)
+                ->first();
+            
+            if ($existingUser) {
+                $fail('Ya existe un usuario registrado con esta nacionalidad.');
+            }
+        }
+    ],
             'DireccionUsuario' => 'required|string|max:255',
             'DescripcionUsuario' => 'required|string|max:255',
             'Generos_idGenero' => 'required|exists:generos,idGenero',
             'Nacionalidades_idNacionalidad' => 'required|exists:nacionalidades,idNacionalidad',
-            'sitio_web' => 'nullable|url',
-            'facebook' => 'nullable|url',
-            'instagram' => 'nullable|string',
-            'twitter' => 'nullable|string',
-            'tiktok' => 'nullable|string',
+            'sitio_web' => 'nullable|url|unique:usuarios,sitio_web',
+            'facebook' => 'nullable|url|unique:usuarios,facebook',
+            'instagram' => 'nullable|string|unique:usuarios,instagram',
+            'twitter' => 'nullable|string|unique:usuarios,twitter',
+            'tiktok' => 'nullable|string|unique:usuarios,tiktok',
         ], [
             'NombreUsuario.required' => 'El nombre de usuario es obligatorio.',
             'NombreUsuario.string' => 'El nombre de usuario debe ser un texto.',
@@ -79,16 +95,22 @@ class AuthController extends Controller
             
             'Nacionalidades_idNacionalidad.required' => 'La nacionalidad es obligatoria.',
             'Nacionalidades_idNacionalidad.exists' => 'La nacionalidad seleccionada no es válida.',
+            'Nacionalidades_idNacionalidad.required' => 'La nacionalidad es obligatoria.',
             
             'sitio_web.url' => 'El sitio web debe tener un formato de URL válido.',
+            'sitio_web.unique' => 'El sitio web ya está registrado. Por favor, ingrese una URL diferente.',
             
             'facebook.url' => 'El enlace de Facebook debe tener un formato de URL válido.',
+            'facebook.unique' => 'El enlace de Facebook ya está registrado.',
             
             'instagram.string' => 'El enlace de Instagram debe ser un texto.',
+            'instagram.unique' => 'El enlace de Instagram ya está registrado.',
             
             'twitter.string' => 'El enlace de Twitter debe ser un texto.',
+            'twitter.unique' => 'El enlace de Twitter ya está registrado.',
             
             'tiktok.string' => 'El enlace de TikTok debe ser un texto.',
+            'tiktok.unique' => 'El enlace de TikTok ya está registrado.',
         ]);
 
         // Si la validación falla, redirige con errores
@@ -111,6 +133,8 @@ class AuthController extends Controller
         'Generos_idGenero' => $request->Generos_idGenero,
         'Nacionalidades_idNacionalidad' => $request->Nacionalidades_idNacionalidad,
     ]);
+
+    
 
     // Crear las redes sociales si existen
     if ($request->has('sitio_web')) {
