@@ -7,6 +7,8 @@
     <link rel="stylesheet" href="{{ asset('css/style.css') }}"> 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"> 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/tinymce/6.8.3/tinymce.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.all.min.js"></script>
 </head>
 
 <body>
@@ -57,7 +59,8 @@
                     </div>
                 </form>
             </div>
-            
+
+
             <!-- Formulario de Registro -->
             <div class="form signup-form">
             <h2>Crear Cuenta</h2>
@@ -396,7 +399,32 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 });
 
-
     </script>
+@if(session('alert'))
+    <script>
+        Swal.fire({
+            icon: "{{ session('alert.type') }}", // success, error, warning, info
+            title: "{{ session('alert.message') }}",
+            showConfirmButton: false,
+            timer: 3000 // Tiempo en milisegundos
+        });
+    </script>
+@endif
+
+@if ($errors->any())
+    <script>
+        Swal.fire({
+            icon: "error",
+            title: "Errores en el formulario",
+            html: "<ul>@foreach($errors->all() as $error)<li>{{ $error }}</li>@endforeach</ul>",
+            showCloseButton: true
+        });
+    </script>
+@endif
+
+
+
+
+
 </body>
 </html>

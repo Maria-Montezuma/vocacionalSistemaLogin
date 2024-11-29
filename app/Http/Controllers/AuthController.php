@@ -31,7 +31,7 @@ class AuthController extends Controller
             'CorreoUsuario' => 'required|email|unique:usuarios,CorreoUsuario',
             'ContrasenaUsuario' => 'required|string|min:8|confirmed',
             'FechaNacimientoUsuario' => 'required|date',
-            'CedulaUsuario' => 'required|numeric',
+            'CedulaUsuario' => 'required|numeric|unique:usuarios,CedulaUsuario',
             'DireccionUsuario' => 'required|string|max:255',
             'DescripcionUsuario' => 'required|string|max:255',
             'Generos_idGenero' => 'required|exists:generos,idGenero',
@@ -41,12 +41,62 @@ class AuthController extends Controller
             'instagram' => 'nullable|string',
             'twitter' => 'nullable|string',
             'tiktok' => 'nullable|string',
+        ], [
+            'NombreUsuario.required' => 'El nombre de usuario es obligatorio.',
+            'NombreUsuario.string' => 'El nombre de usuario debe ser un texto.',
+            'NombreUsuario.max' => 'El nombre de usuario no puede exceder los 255 caracteres.',
+            
+            'ApellidoUsuario.required' => 'El apellido de usuario es obligatorio.',
+            'ApellidoUsuario.string' => 'El apellido de usuario debe ser un texto.',
+            'ApellidoUsuario.max' => 'El apellido de usuario no puede exceder los 255 caracteres.',
+            
+            'CorreoUsuario.required' => 'El correo electrónico es obligatorio.',
+            'CorreoUsuario.email' => 'El correo electrónico debe tener un formato válido.',
+            'CorreoUsuario.unique' => 'El correo electrónico ya está registrado.',
+            
+            'ContrasenaUsuario.required' => 'La contraseña es obligatoria.',
+            'ContrasenaUsuario.string' => 'La contraseña debe ser un texto.',
+            'ContrasenaUsuario.min' => 'La contraseña debe tener al menos 8 caracteres.',
+            'ContrasenaUsuario.confirmed' => 'Las contraseñas no coinciden.',
+            
+            'FechaNacimientoUsuario.required' => 'La fecha de nacimiento es obligatoria.',
+            'FechaNacimientoUsuario.date' => 'La fecha de nacimiento debe ser una fecha válida.',
+            
+            'CedulaUsuario.required' => 'La cédula es obligatoria.',
+            'CedulaUsuario.numeric' => 'La cédula debe ser un número.',
+            'CedulaUsuario.unique' => 'La cédula ingresada ya está registrada. Por favor, ingrese una cédula diferente.',
+            
+            'DireccionUsuario.required' => 'La dirección es obligatoria.',
+            'DireccionUsuario.string' => 'La dirección debe ser un texto.',
+            'DireccionUsuario.max' => 'La dirección no puede exceder los 255 caracteres.',
+            
+            'DescripcionUsuario.required' => 'La descripción es obligatoria.',
+            'DescripcionUsuario.string' => 'La descripción debe ser un texto.',
+            'DescripcionUsuario.max' => 'La descripción no puede exceder los 255 caracteres.',
+            
+            'Generos_idGenero.required' => 'El género es obligatorio.',
+            'Generos_idGenero.exists' => 'El género seleccionado no es válido.',
+            
+            'Nacionalidades_idNacionalidad.required' => 'La nacionalidad es obligatoria.',
+            'Nacionalidades_idNacionalidad.exists' => 'La nacionalidad seleccionada no es válida.',
+            
+            'sitio_web.url' => 'El sitio web debe tener un formato de URL válido.',
+            
+            'facebook.url' => 'El enlace de Facebook debe tener un formato de URL válido.',
+            
+            'instagram.string' => 'El enlace de Instagram debe ser un texto.',
+            
+            'twitter.string' => 'El enlace de Twitter debe ser un texto.',
+            
+            'tiktok.string' => 'El enlace de TikTok debe ser un texto.',
         ]);
 
         // Si la validación falla, redirige con errores
-        if ($validator->fails()) {
-            return redirect()->back()->withErrors($validator)->withInput();
-        }
+    
+        // Si la validación falla, redirige con errores
+    if ($validator->fails()) {
+        return redirect()->back()->withErrors($validator)->withInput()->with('error', 'Por favor, corrija los errores en el formulario.');
+    }
 
         // Crear el usuario
         $usuario = Usuario::create([
