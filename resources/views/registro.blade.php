@@ -147,8 +147,8 @@
                     </div>
 
 
-                    <!-- Nuevo campo para sitio web personal -->
-                    <div class="col">
+                     <!-- Nuevo campo para sitio web personal -->
+                     <div class="col">
     <label for="sitio_web">
         <i class="fas fa-globe"></i> Sitio Web Personal:
     </label>
