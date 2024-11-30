@@ -53,7 +53,7 @@ class AuthController extends Controller
             'DescripcionUsuario' => 'required|string|max:255',
             'Generos_idGenero' => 'required|exists:generos,idGenero',
             'Nacionalidades_idNacionalidad' => 'required|exists:nacionalidades,idNacionalidad',
-            'fecha_nacimiento' => 'required|date|before_or_equal:' . now()->subYears(15)->toDateString(),
+            'FechaNacimientoUsuario' => 'required|date|before_or_equal:' . now()->subYears(15)->toDateString(),
             'sitio_web' => 'nullable|url',
             'facebook' => 'nullable|url',
             'instagram' => 'nullable|string',
@@ -99,7 +99,7 @@ class AuthController extends Controller
             'Nacionalidades_idNacionalidad.exists' => 'La nacionalidad seleccionada no es válida.',
             'Nacionalidades_idNacionalidad.required' => 'La nacionalidad es obligatoria.',
 
-            'fecha_nacimiento' => 'Usted no cumple con el requisito de edad para registrarse',
+            'FechaNacimientoUsuario' => 'Usted no cumple con el requisito de edad para registrarse',
             
             'sitio_web.url' => 'El sitio web debe tener un formato de URL válido.',
             'sitio_web.unique' => 'El sitio web ya está registrado. Por favor, ingrese una URL diferente.',
