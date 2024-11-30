@@ -79,6 +79,13 @@
         .logout-btn:hover {
             background-color: #cc0000;
         }
+
+        .description {
+            background-color: #f9f9f9;
+            padding: 15px;
+            border-radius: 5px;
+            margin-top: 15px;
+        }
     </style>
 </head>
 <body>
@@ -87,22 +94,29 @@
             <div class="profile-header">
                 <div class="profile-pic"></div>
                 <div class="profile-info">
-                    <h1>{{ session('NombreUsuario') }}</h1>
+                    <h1>{{ session('NombreUsuario') }} {{ session('ApellidoUsuario') }}</h1>
                     <p>{{ session('CorreoUsuario') }}</p>
                 </div>
             </div>
 
             <div class="profile-details">
-                <div class="detail-item">
-                    <strong>ID de Usuario:</strong> {{ session('idUsuario') }}
-                </div>
-                <div class="detail-item">
-                    <strong>Correo:</strong> {{ session('CorreoUsuario') }}
-                </div>
-                <div class="detail-item">
-                    <strong>Nombre:</strong> {{ session('NombreUsuario') }}
-                </div>
-            </div>
+    <div class="detail-item">
+        <strong>Nombre Completo:</strong> {{ $usuario->NombreUsuario }} {{ $usuario->ApellidoUsuario }}
+    </div>
+    <div class="detail-item">
+        <strong>Correo:</strong> {{ $usuario->CorreoUsuario }}
+    </div>
+    <div class="detail-item">
+        <strong>Dirección:</strong> {{ $usuario->DireccionUsuario }}
+    </div>
+    <div class="detail-item">
+        <strong>Género:</strong> {{ $genero }}
+    </div>
+    <div class="description">
+        <strong>Descripción:</strong>
+        <p>{{ $usuario->DescripcionUsuario }}</p>
+    </div>
+</div>
 
             <form action="{{ route('logout') }}" method="POST">
                 @csrf

@@ -211,9 +211,26 @@ class AuthController extends Controller
     }
 
     public function perfil()
-    {
-        return view('perfil');
+{
+    // Obtener el ID del usuario de la sesión
+    $usuarioId = session('usuario_id');
+
+    // Buscar el usuario con su relación de género
+    $usuario = Usuario::with(['genero'])
+        ->where('idUsuario', $usuarioId)
+        ->first();
+
+    // Verificar si el usuario existe
+    if (!$usuario) {
+        return redirect()->route('login')->with('error', 'Usuario no encontrado');
     }
+
+    // Pasar los datos del usuario a la vista
+    return view('perfil', [
+        'usuario' => $usuario,
+        'genero' => $usuario->genero->NombreGenero ?? 'No especificado'
+    ]);
+}
 
     public function logout()
     {
