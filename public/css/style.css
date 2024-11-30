@@ -562,3 +562,68 @@ h3 {
     white-space: nowrap; /* Asegura que el texto no se divida en varias líneas */
     font-size: 14px;
     color: #666;}
+
+    .profile-card {
+        background-color: white;
+        border-radius: 10px;
+        padding: 20px;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        margin-top: 20px;
+    }
+
+    .profile-header {
+        display: flex;
+        align-items: center;
+        margin-bottom: 20px;
+    }
+
+    .profile-pic {
+        width: 100px;
+        height: 100px;
+        border-radius: 50%;
+        background-color: #ddd;
+        margin-right: 20px;
+    }
+
+    .profile-info h1 {
+        color: #333;
+        margin-bottom: 10px;
+    }
+
+    .profile-info p {
+        color: #666;
+    }
+
+    .profile-details {
+        margin-top: 20px;
+    }
+
+    .detail-item {
+        padding: 10px 0;
+        border-bottom: 1px solid #eee;
+    }
+
+    .detail-item:last-child {
+        border-bottom: none;
+    }
+
+    .logout-btn {
+        background-color: #e2740e;
+        color: white;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        margin-top: 20px;
+    }
+
+    .logout-btn:hover {
+        background-color: #f79840;
+    }
+
+    .description {
+        background-color: #f9f9f9;
+        padding: 15px;
+        border-radius: 5px;
+        margin-top: 15px;
+    }

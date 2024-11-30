@@ -232,11 +232,17 @@ class AuthController extends Controller
     ]);
 }
 
-    public function logout()
-    {
-        session()->forget(['usuario_id', 'usuario_nombre', 'usuario_email']);
-        return redirect()->route('registro');
-    }
+public function logout()
+{
+    // Eliminar datos de sesión
+    session()->forget(['idUsuario', 'NombreUsuario', 'CorreoUsuario']);
+    
+    // Redirigir a la página de registro
+    return redirect()->route('registro');
+}
 
-
+public function showPasswordRecoveryForm()
+{
+    return view('recuperar-contrasena'); // Ajusta la ruta de la vista según sea necesario
+}
 }
