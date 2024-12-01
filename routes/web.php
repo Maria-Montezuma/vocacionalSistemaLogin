@@ -73,3 +73,16 @@ Route::post('/reset-password', [RecuperarContrasenaController::class, 'resetPass
     Route::post('/guardar-respuestas', [AuthController::class, 'guardarRespuestasSeguridad'])->name('guardar.respuestas')->middleware('auth');
     Route::get('/guardar-respuestas', [AuthController::class, 'guardarRespuestasSeguridad'])->name('guardar.respuestas')->middleware('auth');
     // routes/web.php
+
+    Route::post('/verificar-correo-preguntas', [RecuperarContrasenaController::class, 'verificarCorreoPreguntas'])->name('verificar.correo.preguntas');
+
+    Route::get('/preguntas-seguridad/{userId}', [RecuperarContrasenaController::class, 'mostrarPreguntasSeguridad'])->name('preguntas.seguridad');
+
+    Route::post('/verificar-respuestas-seguridad', [RecuperarContrasenaController::class, 'verificarRespuestasSeguridad'])->name('verificar.respuestas');
+
+    // Si es una ruta web
+Route::get('/mostrar-preguntas/{userId}', [RecuperarContrasenaController::class, 'mostrarPreguntasSeguridad'])->name('mostrar.preguntas');
+
+Route::post('/validar-respuestas', [RecuperarContrasenaController::class, 'validarRespuestas']);
+Route::post('/cambiar-contrasena', [RecuperarContrasenaController::class, 'cambiarContrasena']);
+
