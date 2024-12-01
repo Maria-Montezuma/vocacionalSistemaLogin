@@ -23,18 +23,21 @@ class RecuperacionContrasena extends Mailable
 
     public $usuario;
     public $token;
-    public $resetUrl;
 
     public function __construct($usuario, $token)
     {
         $this->usuario = $usuario;
         $this->token = $token;
-        $this->resetUrl = url('/reset-password/' . $token);
     }
 
     public function build()
     {
+        $resetUrl = 'https://four-shoes-exist.loca.lt/reset-password/' . $this->token;
         return $this->view('emails.recuperacion-contrasena')
-                    ->subject('Recuperación de Contraseña');
+                    ->subject('Recuperación de Contraseña')
+                    ->with([
+                        'usuario' => $this->usuario,
+                        'resetUrl' => $resetUrl
+                    ]);
     }
 }

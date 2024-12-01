@@ -28,6 +28,7 @@ class Token extends Model
 	protected $table = 'tokens';
 	protected $primaryKey = 'idToken';
 	public $timestamps = false;
+	
 
 	const TYPE_VERIFY = 'verify';
     const TYPE_RESET = 'reset';

@@ -21,12 +21,6 @@ Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
 Route::post('login', [AuthController::class, 'login'])->name('login.submit');
 Route::post('/login', [AuthController::class, 'login'])->name('login.submit');
 
-// Mostrar formulario de recuperación de contraseña
-Route::get('recuperar-contraseña', [AuthController::class, 'showPasswordRecoveryForm'])->name('recuperar-contraseña');
-
-// Procesar la recuperación de contraseña
-Route::post('recuperar-contraseña', [AuthController::class, 'processPasswordRecovery'])->name('recuperar-contraseña.submit');
-
 // Página de perfil del usuario (restringida a usuarios autenticados)
 Route::get('perfil', [AuthController::class, 'showProfile'])->name('perfil')->middleware('auth');
 
@@ -48,17 +42,20 @@ Route::post('/register', [AuthController::class, 'register'])->name('register');
 Route::post('/verificar-correo', [AuthController::class, 'verificarCorreo'])->name('verificar.correo');
 
 
-// Rutas de recuperación de contraseña
+// Mostrar formulario de recuperación
 Route::get('recuperar-contraseña', function() {
     return view('recuperar-contrasena');
 })->name('recuperar-contraseña');
 
+// Procesar el envío del enlace
 Route::post('/enviar-enlace-recuperacion', [RecuperarContrasenaController::class, 'enviarEnlaceRecuperacion'])
     ->name('enviar.enlace.recuperacion');
 
-    Route::get('/reset-password/{token}', [RecuperarContrasenaController::class, 'showResetForm'])->name('password.reset');
-Route::post('/reset-password', [RecuperarContrasenaController::class, 'resetPassword'])->name('password.update');
+// Mostrar formulario de reset
+Route::get('/reset-password/{token}', [RecuperarContrasenaController::class, 'showResetForm'])
+    ->name('password.reset');
 
+// Procesar el reset
 Route::post('/reset-password', [RecuperarContrasenaController::class, 'resetPassword'])
     ->name('password.update');
 
