@@ -3,126 +3,102 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>Recuperar Contraseña</title>
-    <link rel="stylesheet" href="{{ asset('css/style.css') }}">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f8f9fa;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .recovery-container {
+            background: white;
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            max-width: 400px;
+            width: 100%;
+        }
+        .form-group {
+            margin-bottom: 1rem;
+        }
+        .btn-primary {
+            width: 100%;
+            padding: 10px;
+            margin-top: 1rem;
+        }
+    </style>
 </head>
-<body class="body-password">
-    <div class="form-wrapper">
-        <div class="container">
-            <div class="form">
-                <h2>Recuperar Contraseña</h2>
-                
-                <!-- Paso 1: Selección del método de recuperación -->
-                <div class="step active-step" id="step-1">
-                    <h3>¿Cómo deseas recuperar tu contraseña?</h3>
-                    <label>
-                        <input type="radio" name="MetodoRecuperacion" value="email" onclick="showStep(2)" required> 
-                        Recuperar por correo electrónico
-                    </label>
-                    <br>
-                    <label>
-                        <input type="radio" name="MetodoRecuperacion" value="questions" onclick="showStep(4)" required> 
-                        Recuperar por preguntas secretas
-                    </label>
-
-                    <button type="button" onclick="window.location.href='registro'" class="login-button">
-                        Regresar al Login
-                    </button>
-                </div>
-                
-                <!-- Paso 2: Recuperación por correo electrónico -->
-                <div class="step" id="step-2">
-                    <h3>Ingresa tu correo electrónico</h3>
-                    <div class="col">
-                        <label for="CorreoUsuario">
-                            <i class="fas fa-envelope"></i> Correo Electrónico:
-                        </label>
-                        <input type="email" id="CorreoUsuario" name="CorreoUsuario" required>
-                    </div>
-                    <button type="submit">Enviar enlace de recuperación</button>
-                    <button type="button" onclick="showStep(1)">Volver a elegir método</button>
-                </div>
-                
-                <!-- Paso 3: Solicitud de correo antes de preguntas secretas -->
-                <div class="step" id="step-4">
-                    <h3>Primero ingresa tu correo electrónico</h3>
-                    <div class="col">
-                        <label for="CorreoUsuario">
-                            <i class="fas fa-envelope"></i> Correo Electrónico:
-                        </label>
-                        <input type="email" id="CorreoUsuario" name="CorreoUsuario" required>
-                    </div>
-                    <button type="button" onclick="validateEmail()">Continuar</button>
-                    <button type="button" onclick="showStep(1)">Volver a elegir método</button>
-                </div>
-                
-                <!-- Paso 4: Recuperación por preguntas secretas -->
-                <div class="step" id="step-3">
-                    <h3>Responde tus preguntas de seguridad</h3>
-                    <div class="col">
-                        <label for="PreguntaSeguridad1">
-                            <i class="fas fa-shield-alt"></i> Pregunta de seguridad #1:
-                        </label>
-                        <select id="PreguntaSeguridad1" name="Generos_idGenero" class="security-select" required>
-                            <option value="">Selecciona una pregunta</option>
-                            <option value="mascota">¿Cuál es el nombre de tu primera mascota?</option>
-                            <option value="ciudad">¿En qué ciudad naciste?</option>
-                            <option value="escuela">¿Cuál fue tu primera escuela?</option>
-                        </select>
-                        <input type="text" id="Respuesta1" name="DescripcionUsuario" placeholder="Tu respuesta" required>
-                    </div>
-                    
-                    <button type="submit">Verificar respuestas</button>
-                    <button type="button" onclick="showStep(1)">Volver a elegir método</button>
-                </div>
+<body>
+    <div class="recovery-container">
+        <h2 class="text-center mb-4">Recuperar Contraseña</h2>
+        
+        <form id="recuperarForm" onsubmit="event.preventDefault(); enviarEnlaceRecuperacion();">
+            @csrf
+            <div class="form-group">
+                <label for="CorreoUsuarioRecuperar">Correo electrónico</label>
+                <input 
+                    type="email" 
+                    class="form-control" 
+                    id="CorreoUsuarioRecuperar" 
+                    placeholder="Ingresa tu correo electrónico"
+                    required>
             </div>
+            <button type="submit" class="btn btn-primary">Enviar enlace de recuperación</button>
+        </form>
+
+        <div class="text-center mt-3">
+            <a href="{{ route('registro') }}">Volver al inicio de sesión</a>
         </div>
     </div>
 
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
-        function showStep(stepNumber) {
-            const steps = document.querySelectorAll('.step');
-            steps.forEach(step => {
-                step.classList.remove('active-step');
-            });
-            document.getElementById('step-' + stepNumber).classList.add('active-step');
+        async function enviarEnlaceRecuperacion() {
+            const emailInput = document.getElementById('CorreoUsuarioRecuperar');
+            const email = emailInput.value.trim();
+
+            try {
+                const response = await fetch('/enviar-enlace-recuperacion', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
+                    },
+                    body: JSON.stringify({ CorreoUsuario: email })
+                });
+
+                const result = await response.json();
+
+                if (result.status === 'success') {
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Éxito',
+                        text: result.message,
+                        confirmButtonColor: '#3085d6'
+                    });
+                    emailInput.value = ''; // Limpiar el campo
+                } else {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error',
+                        text: result.message,
+                        confirmButtonColor: '#3085d6'
+                    });
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: 'Ocurrió un error al enviar el enlace de recuperación.',
+                    confirmButtonColor: '#3085d6'
+                });
+            }
         }
-
-        async function validateEmail() {
-    const emailInput = document.getElementById('CorreoUsuario');
-    const email = emailInput.value.trim();
-
-    if (!email) {
-        alert("Por favor, ingresa un correo válido.");
-        return;
-    }
-
-    console.log("Correo a enviar:", email); // Agrega esta línea para depurar
-
-    try {
-        const response = await fetch('/verificar-correo', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'X-CSRF-TOKEN': '{{ csrf_token() }}'
-            },
-            body: JSON.stringify({ CorreoUsuario: email })
-        });
-
-        const result = await response.json();
-        if (result.status === 'success') {
-            alert(result.message);
-            showStep(3);
-        } else {
-            alert(result.message);
-        }
-    } catch (error) {
-        console.error('Error:', error);
-        alert("Ocurrió un error al verificar el correo.");
-    }
-}
-
     </script>
 </body>
 </html>

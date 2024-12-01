@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\RecuperarContrasenaController;
 
 
 // Página principal (redirige al formulario de registro)
@@ -35,15 +36,33 @@ Route::post('logout', [AuthController::class, 'logout'])->name('logout');
 // Ruta para el perfil
 Route::get('/perfil', [AuthController::class, 'perfil'])->name('perfil');
 
-use App\Http\Controllers\RecuperarContrasenaController;
 
-Route::post('/verificar-correo', [RecuperarContrasenaController::class, 'verificarCorreo']);
+// Route::post('/verificar-correo', [RecuperarContrasenaController::class, 'verificarCorreo']);
+Route::post('/enviar-enlace-recuperacion', [AuthController::class, 'enviarEnlaceRecuperacion'])->name('enviar.enlace.recuperacion');
 
 Route::get('verify-email/{token}', [AuthController::class, 'verificarEmail'])->name('verify.email');
 
 
 Route::post('/register', [AuthController::class, 'register'])->name('register');
 
+Route::post('/verificar-correo', [AuthController::class, 'verificarCorreo'])->name('verificar.correo');
+
+
+// Rutas de recuperación de contraseña
+Route::get('recuperar-contraseña', function() {
+    return view('recuperar-contrasena');
+})->name('recuperar-contraseña');
+
+Route::post('/enviar-enlace-recuperacion', [RecuperarContrasenaController::class, 'enviarEnlaceRecuperacion'])
+    ->name('enviar.enlace.recuperacion');
+
+    Route::get('/reset-password/{token}', [RecuperarContrasenaController::class, 'showResetForm'])->name('password.reset');
+Route::post('/reset-password', [RecuperarContrasenaController::class, 'resetPassword'])->name('password.update');
+
+Route::post('/reset-password', [RecuperarContrasenaController::class, 'resetPassword'])
+    ->name('password.update');
+
+    
 
 
 

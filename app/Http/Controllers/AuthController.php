@@ -12,6 +12,8 @@ use App\Models\Nacionalidade;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
+use App\Mail\RecuperacionPassword;
+use Illuminate\Support\Facades\DB; // Añade esta línea
 use Illuminate\Validation\Rule;
 
 
@@ -289,6 +291,37 @@ public function showPasswordRecoveryForm()
     return view('recuperar-contrasena'); // Ajusta la ruta de la vista según sea necesario
 }
 
+public function verificarCorreo(Request $request)
+{
+    try {
+        $request->validate([
+            'CorreoUsuario' => 'required|email'
+        ]);
+
+        $usuario = Usuario::where('CorreoUsuario', $request->CorreoUsuario)->first();
+
+        if ($usuario) {
+            // Si encuentra el usuario, guarda el ID en la sesión para usarlo después
+            session(['reset_email' => $usuario->CorreoUsuario]);
+            
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Correo electrónico verificado correctamente'
+            ]);
+        }
+
+        return response()->json([
+            'status' => 'error',
+            'message' => 'No existe una cuenta con este correo electrónico'
+        ]);
+
+    } catch (\Exception $e) {
+        return response()->json([
+            'status' => 'error',
+            'message' => 'Error al verificar el correo: ' . $e->getMessage()
+        ]);
+    }
+}
 
 
 }
