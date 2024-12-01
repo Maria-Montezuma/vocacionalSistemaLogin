@@ -17,12 +17,12 @@
                 <div class="step active-step" id="step-1">
                     <h3>¿Cómo deseas recuperar tu contraseña?</h3>
                     <label>
-                        <input type="radio" name="recovery-method" value="email" onclick="showStep(2)" required> 
+                        <input type="radio" name="MetodoRecuperacion" value="email" onclick="showStep(2)" required> 
                         Recuperar por correo electrónico
                     </label>
                     <br>
                     <label>
-                        <input type="radio" name="recovery-method" value="questions" onclick="showStep(4)" required> 
+                        <input type="radio" name="MetodoRecuperacion" value="questions" onclick="showStep(4)" required> 
                         Recuperar por preguntas secretas
                     </label>
 
@@ -35,10 +35,10 @@
                 <div class="step" id="step-2">
                     <h3>Ingresa tu correo electrónico</h3>
                     <div class="col">
-                        <label for="email-recovery">
+                        <label for="CorreoUsuario">
                             <i class="fas fa-envelope"></i> Correo Electrónico:
                         </label>
-                        <input type="email" id="email-recovery" name="email" required>
+                        <input type="email" id="CorreoUsuario" name="CorreoUsuario" required>
                     </div>
                     <button type="submit">Enviar enlace de recuperación</button>
                     <button type="button" onclick="showStep(1)">Volver a elegir método</button>
@@ -48,10 +48,10 @@
                 <div class="step" id="step-4">
                     <h3>Primero ingresa tu correo electrónico</h3>
                     <div class="col">
-                        <label for="email-security">
+                        <label for="CorreoUsuario">
                             <i class="fas fa-envelope"></i> Correo Electrónico:
                         </label>
-                        <input type="email" id="email-security" name="email" required>
+                        <input type="email" id="CorreoUsuario" name="CorreoUsuario" required>
                     </div>
                     <button type="button" onclick="validateEmail()">Continuar</button>
                     <button type="button" onclick="showStep(1)">Volver a elegir método</button>
@@ -61,16 +61,16 @@
                 <div class="step" id="step-3">
                     <h3>Responde tus preguntas de seguridad</h3>
                     <div class="col">
-                        <label for="security-question-1">
+                        <label for="PreguntaSeguridad1">
                             <i class="fas fa-shield-alt"></i> Pregunta de seguridad #1:
                         </label>
-                        <select id="security-question-1" name="security_question_1" class="security-select" required>
+                        <select id="PreguntaSeguridad1" name="Generos_idGenero" class="security-select" required>
                             <option value="">Selecciona una pregunta</option>
                             <option value="mascota">¿Cuál es el nombre de tu primera mascota?</option>
                             <option value="ciudad">¿En qué ciudad naciste?</option>
                             <option value="escuela">¿Cuál fue tu primera escuela?</option>
                         </select>
-                        <input type="text" id="answer1" name="answer1" placeholder="Tu respuesta" required>
+                        <input type="text" id="Respuesta1" name="DescripcionUsuario" placeholder="Tu respuesta" required>
                     </div>
                     
                     <button type="submit">Verificar respuestas</button>
@@ -89,14 +89,40 @@
             document.getElementById('step-' + stepNumber).classList.add('active-step');
         }
 
-        function validateEmail() {
-            const emailInput = document.getElementById('email-security');
-            if (emailInput.value.trim() === "") {
-                alert("Por favor, ingresa un correo válido.");
-            } else {
-                showStep(3);
-            }
+        async function validateEmail() {
+    const emailInput = document.getElementById('CorreoUsuario');
+    const email = emailInput.value.trim();
+
+    if (!email) {
+        alert("Por favor, ingresa un correo válido.");
+        return;
+    }
+
+    console.log("Correo a enviar:", email); // Agrega esta línea para depurar
+
+    try {
+        const response = await fetch('/verificar-correo', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': '{{ csrf_token() }}'
+            },
+            body: JSON.stringify({ CorreoUsuario: email })
+        });
+
+        const result = await response.json();
+        if (result.status === 'success') {
+            alert(result.message);
+            showStep(3);
+        } else {
+            alert(result.message);
         }
+    } catch (error) {
+        console.error('Error:', error);
+        alert("Ocurrió un error al verificar el correo.");
+    }
+}
+
     </script>
 </body>
 </html>

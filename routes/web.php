@@ -34,6 +34,13 @@ Route::post('logout', [AuthController::class, 'logout'])->name('logout');
 // Ruta para el perfil
 Route::get('/perfil', [AuthController::class, 'perfil'])->name('perfil');
 
+use App\Http\Controllers\RecuperarContrasenaController;
+
+Route::post('/verificar-correo', [RecuperarContrasenaController::class, 'verificarCorreo']);
+
+
+
+
 
 
 
