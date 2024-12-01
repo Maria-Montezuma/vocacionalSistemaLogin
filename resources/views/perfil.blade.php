@@ -38,39 +38,62 @@
 
               <!-- Botón para desplegar las preguntas de seguridad -->
             <button id="toggle-questions" class="btn-toggle">Configurar Preguntas de Seguridad</button>
-
+            
 <!-- Formulario de preguntas de seguridad -->
 <div id="questions-section" class="security-questions" style="display: none;">
-    <form action="" method="POST">
-        @csrf
-        <div class="form-group">
-            <label for="pregunta1">Pregunta 1:</label>
-            <select id="pregunta1" name="pregunta1" class="question-select" required>
-                <option value="">Selecciona una pregunta</option>
-                <option value="¿Cuál es tu color favorito?">¿Cuál es tu color favorito?</option>
-                <option value="¿Cuál es el nombre de tu primera mascota?">¿Cuál es el nombre de tu primera mascota?</option>
-            </select>
-        </div>
-        <div class="form-group">
-            <label for="respuesta1">Respuesta 1:</label>
-            <input type="text" id="respuesta1" name="respuesta1" required>
-        </div>
-        <div class="form-group">
-            <label for="pregunta2">Pregunta 2:</label>
-            <select id="pregunta2" name="pregunta2" class="question-select" required>
-                <option value="">Selecciona una pregunta</option>
-                <option value="¿Cuál es tu color favorito?">¿Cuál es tu color favorito?</option>
-                <option value="¿Cuál es el nombre de tu primera mascota?">¿Cuál es el nombre de tu primera mascota?</option>
-            </select>
-        </div>
-        <div class="form-group">
-            <label for="respuesta2">Respuesta 2:</label>
-            <input type="text" id="respuesta2" name="respuesta2" required>
-        </div>
-        
-        <button type="submit" class="submit-btn">Guardar</button>
-    </form>
+<form action="{{ route('guardar.respuestas') }}" method="POST">
+    @csrf
+    <div class="form-group">
+        <label for="pregunta1">Pregunta 1:</label>
+        <select id="pregunta1" name="pregunta1" class="question-select" required>
+            <option value="">Selecciona una pregunta</option>
+            @foreach($preguntas as $pregunta)
+                <option value="{{ $pregunta->idPreguntasSeguridad }}">
+                    {{ $pregunta->PreguntasSeguridad }}
+                </option>
+            @endforeach
+        </select>
+    </div>
+    <div class="form-group">
+        <label for="respuesta1">Respuesta 1:</label>
+        <input type="text" id="respuesta1" name="RespuestaSeguridad_hash" required>
+    </div>
+    <div class="form-group">
+        <label for="pregunta2">Pregunta 2:</label>
+        <select id="pregunta2" name="pregunta2" class="question-select" required>
+            <option value="">Selecciona una pregunta</option>
+            @foreach($preguntas as $pregunta)
+                <option value="{{ $pregunta->idPreguntasSeguridad }}">
+                    {{ $pregunta->PreguntasSeguridad }}
+                </option>
+            @endforeach
+        </select>
+    </div>
+    <div class="form-group">
+        <label for="respuesta2">Respuesta 2:</label>
+        <input type="text" id="respuesta2" name="RespuestaSeguridad_hash" required>
+    </div>
+    <div class="form-group">
+        <label for="pregunta2">Pregunta 3:</label>
+        <select id="pregunta2" name="pregunta2" class="question-select" required>
+            <option value="">Selecciona una pregunta</option>
+            @foreach($preguntas as $pregunta)
+                <option value="{{ $pregunta->idPreguntasSeguridad }}">
+                    {{ $pregunta->PreguntasSeguridad }}
+                </option>
+            @endforeach
+        </select>
+    </div>
+    <div class="form-group">
+        <label for="respuesta2">Respuesta 3:</label>
+        <input type="text" id="respuesta2" name="RespuestaSeguridad_hash" required>
+    </div>
+
+    <button type="submit" class="submit-btn">Guardar Respuestas</button>
+</form>
+
 </div>
+
 
             <form action="{{ route('logout') }}" method="POST">
                 @csrf
@@ -116,7 +139,7 @@
     }
 
     // Configurar temporizador de cierre de sesión (1 minuto = 60000 ms)
-    const tiempoCierreSesion = 60000; 
+    const tiempoCierreSesion = 900000; 
     setTimeout(cerrarSesionAutomaticamente, tiempoCierreSesion);
 
     // Mostrar alerta antes de cerrar sesión (opcional)
@@ -129,13 +152,14 @@
     <!-- Script para manejar el despliegue y la desactivación de opciones -->
     <script>
         document.getElementById('toggle-questions').addEventListener('click', function() {
-            var questionsSection = document.getElementById('questions-section');
-            if (questionsSection.style.display === 'none' || questionsSection.style.display === '') {
-                questionsSection.style.display = 'block';
-            } else {
-                questionsSection.style.display = 'none';
-            }
-        });
+    var questionsSection = document.getElementById('questions-section');
+    console.log('Botón clickeado');
+    if (questionsSection.style.display === 'none' || questionsSection.style.display === '') {
+        questionsSection.style.display = 'block';
+    } else {
+        questionsSection.style.display = 'none';
+    }
+});
 
         document.querySelectorAll('.question-select').forEach(function(select) {
             select.addEventListener('change', function() {

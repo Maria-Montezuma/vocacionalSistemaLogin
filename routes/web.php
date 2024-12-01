@@ -13,13 +13,13 @@ Route::post('/', [AuthController::class, 'showRegistrationForm'])->name('registr
 Route::post('registro', [AuthController::class, 'register'])->name('registro.submit');
 Route::get('/registro', [AuthController::class, 'showRegistrationForm'])->name('registro');
 
-// Mostrar formulario de login
-Route::get('login', [AuthController::class, 'showLoginForm'])->name('login');
-Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
+// // Mostrar formulario de login
+// Route::get('login', [AuthController::class, 'showLoginForm'])->name('login');
+// Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
 
 // Procesar el login
+Route::get('login', [AuthController::class, 'login'])->name('login.submit');
 Route::post('login', [AuthController::class, 'login'])->name('login.submit');
-Route::post('/login', [AuthController::class, 'login'])->name('login.submit');
 
 // Página de perfil del usuario (restringida a usuarios autenticados)
 Route::get('perfil', [AuthController::class, 'showProfile'])->name('perfil')->middleware('auth');
@@ -64,5 +64,9 @@ Route::post('/reset-password', [RecuperarContrasenaController::class, 'resetPass
 
 
 
-
-
+    Route::get('/perfil', [AuthController::class, 'perfil'])->name('perfil');
+    Route::post('/perfil', [AuthController::class, 'perfil'])->name('perfil');
+    // Guardar respuestas de seguridad
+    Route::post('/guardar-respuestas', [AuthController::class, 'guardarRespuestasSeguridad'])->name('guardar.respuestas')->middleware('auth');
+    Route::get('/guardar-respuestas', [AuthController::class, 'guardarRespuestasSeguridad'])->name('guardar.respuestas')->middleware('auth');
+    // routes/web.php

@@ -9,6 +9,8 @@ use App\Models\Token;
 use App\Models\Redessociale;
 use App\Models\Genero;
 use App\Models\Nacionalidade;
+use App\Models\Preguntasseguridad;
+use App\Models\Respuestasseguridad;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
@@ -24,10 +26,12 @@ class AuthController extends Controller
         // Obtener todos los géneros desde la base de datos
         $generos = Genero::all();
         $nacionalidades = Nacionalidade::all(); 
-
+        $preguntas= Preguntasseguridad:: all();
+      
         // Pasar la variable $generos a la vista
-        return view('registro', compact('generos', 'nacionalidades'));
+        return view('registro', compact('generos', 'nacionalidades', 'preguntas'));
     }
+
 
     public function verificarEmail($token)
     {
@@ -231,31 +235,31 @@ Mail::to($usuario->CorreoUsuario)->send(new VerifyEmail($usuario, $token->Token)
 }
 
 
-    public function login(Request $request)
-    {
-        $request->validate([
-            'CorreoUsuario' => 'required|email',
-            'ContrasenaUsuario' => 'required'
+public function login(Request $request)
+{
+    $request->validate([
+        'CorreoUsuario' => 'required|email',
+        'ContrasenaUsuario' => 'required'
+    ]);
+
+    $usuario = Usuario::where('CorreoUsuario', $request->CorreoUsuario)->first();
+
+    if ($usuario && Hash::check($request->ContrasenaUsuario, $usuario->ContrasenaUsuario)) {
+        session([
+            'usuario_id' => $usuario->idUsuario,
+            'usuario_nombre' => $usuario->NombreUsuario,
+            'usuario_email' => $usuario->CorreoUsuario
         ]);
-
-        $usuario = Usuario::where('CorreoUsuario', $request->CorreoUsuario)->first();
-
-        if ($usuario && Hash::check($request->ContrasenaUsuario, $usuario->ContrasenaUsuario)) {
-            session([
-                'usuario_id' => $usuario->idUsuario,
-                'usuario_nombre' => $usuario->NombreUsuario,
-                'usuario_email' => $usuario->CorreoUsuario
-            ]);
-            
-            return redirect()->route('perfil');
-        }
-
-        return back()->withErrors([
-            'CorreoUsuario' => 'Credenciales incorrectas'
-        ])->withInput();
+        
+        return redirect()->route('perfil');
     }
 
-    public function perfil()
+    return back()->withErrors([
+        'CorreoUsuario' => 'Credenciales incorrectas'
+    ])->withInput();
+}
+
+public function perfil()
 {
     // Obtener el ID del usuario de la sesión
     $usuarioId = session('usuario_id');
@@ -270,12 +274,18 @@ Mail::to($usuario->CorreoUsuario)->send(new VerifyEmail($usuario, $token->Token)
         return redirect()->route('login')->with('error', 'Usuario no encontrado');
     }
 
-    // Pasar los datos del usuario a la vista
+    // Obtener todas las preguntas de seguridad desde la base de datos
+    $preguntas = Preguntasseguridad::all();
+
+    // Pasar los datos del usuario y las preguntas de seguridad a la vista
     return view('perfil', [
         'usuario' => $usuario,
-        'genero' => $usuario->genero->NombreGenero ?? 'No especificado'
+        'genero' => $usuario->genero->NombreGenero ?? 'No especificado',
+        'preguntas' => $preguntas // Pasa la variable $preguntas
     ]);
 }
+
+
 
 public function logout()
 {
@@ -290,6 +300,53 @@ public function showPasswordRecoveryForm()
 {
     return view('recuperar-contrasena'); // Ajusta la ruta de la vista según sea necesario
 }
+public function guardarRespuestasSeguridad(Request $request)
+{
+    // Validación de las respuestas
+    $validator = Validator::make($request->all(), [
+        'pregunta1' => 'required|exists:preguntasseguridad,idPreguntasSeguridad',
+        'respuesta1' => 'required|string|max:255',
+        'pregunta2' => 'required|exists:preguntasseguridad,idPreguntasSeguridad',
+        'respuesta2' => 'required|string|max:255',
+    ], [
+        'pregunta1.exists' => 'La primera pregunta no es válida.',
+        'pregunta2.exists' => 'La segunda pregunta no es válida.',
+        'respuesta1.required' => 'La respuesta a la primera pregunta es obligatoria.',
+        'respuesta2.required' => 'La respuesta a la segunda pregunta es obligatoria.',
+    ]);
+
+    // Si la validación falla, redirigir con errores
+    if ($validator->fails()) {
+        return redirect()->back()->withErrors($validator)->withInput();
+    }
+
+    // Obtener el usuario logueado
+    $usuario = Usuario::find(session('usuario_id'));
+
+    if (!$usuario) {
+        return redirect()->route('login')->with('error', 'Usuario no encontrado');
+    }
+
+    // Crear las respuestas de seguridad
+    Respuestasseguridad::create([
+        'RespuestaSeguridad_hash' => Hash::make($request->respuesta1),
+        'PreguntasSeguridad_idPreguntasSeguridad' => $request->pregunta1,
+        'Usuarios_idUsuario' => $usuario->idUsuario
+    ]);
+
+    Respuestasseguridad::create([
+        'RespuestaSeguridad_hash' => Hash::make($request->respuesta2),
+        'PreguntasSeguridad_idPreguntasSeguridad' => $request->pregunta2,
+        'Usuarios_idUsuario' => $usuario->idUsuario
+    ]);
+
+    // Redirigir al perfil con éxito
+    return redirect()->route('perfil')->with('success', 'Respuestas de seguridad guardadas correctamente');
+}
+// AuthController.php
+
+
+
 
 public function verificarCorreo(Request $request)
 {

@@ -11,7 +11,7 @@ use Illuminate\Database\Eloquent\Model;
 /**
  * Class Respuestasseguridad
  * 
- * @property int $idPreguntaSeguridad
+ * @property int $idRespuestasSeguridad
  * @property string $RespuestaSeguridad_hash
  * @property int $PreguntasSeguridad_idPreguntasSeguridad
  * @property int $Usuarios_idUsuario
@@ -24,7 +24,7 @@ use Illuminate\Database\Eloquent\Model;
 class Respuestasseguridad extends Model
 {
 	protected $table = 'respuestasseguridad';
-	protected $primaryKey = 'idPreguntaSeguridad';
+	protected $primaryKey = 'idRespuestasSeguridad';
 	public $timestamps = false;
 
 	protected $casts = [
