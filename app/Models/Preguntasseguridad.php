@@ -13,7 +13,7 @@ use Illuminate\Database\Eloquent\Model;
  * Class Preguntasseguridad
  * 
  * @property int $idPreguntasSeguridad
- * @property string $PreguntasSeguridad
+ * @property string $PreguntasSeguridad_hash
  * 
  * @property Collection|Respuestasseguridad[] $respuestasseguridads
  *
@@ -26,7 +26,7 @@ class Preguntasseguridad extends Model
 	public $timestamps = false;
 
 	protected $fillable = [
-		'PreguntasSeguridad'
+		'PreguntasSeguridad_hash'
 	];
 
 	public function respuestasseguridads()

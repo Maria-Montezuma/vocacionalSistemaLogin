@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 
+
 // Página principal (redirige al formulario de registro)
 Route::get('/', [AuthController::class, 'showRegistrationForm'])->name('registro');
 Route::post('/', [AuthController::class, 'showRegistrationForm'])->name('registro.submit');
@@ -37,6 +38,11 @@ Route::get('/perfil', [AuthController::class, 'perfil'])->name('perfil');
 use App\Http\Controllers\RecuperarContrasenaController;
 
 Route::post('/verificar-correo', [RecuperarContrasenaController::class, 'verificarCorreo']);
+
+Route::get('verify-email/{token}', [AuthController::class, 'verificarEmail'])->name('verify.email');
+
+
+Route::post('/register', [AuthController::class, 'register'])->name('register');
 
 
 

@@ -29,6 +29,10 @@ class Token extends Model
 	protected $primaryKey = 'idToken';
 	public $timestamps = false;
 
+	const TYPE_VERIFY = 'verify';
+    const TYPE_RESET = 'reset';
+    const TYPE_LEGACY = '2';
+
 	protected $casts = [
 		'Usuarios_idUsuario' => 'int',
 		'TiempoExpiracion' => 'datetime',

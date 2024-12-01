@@ -1,8 +1,11 @@
 <?php
 
 namespace App\Http\Controllers;
-
+use Illuminate\Support\Str; // Agregar al inicio
+use App\Mail\VerifyEmail;  
+use Illuminate\Support\Facades\Mail;
 use App\Models\Usuario;
+use App\Models\Token;
 use App\Models\Redessociale;
 use App\Models\Genero;
 use App\Models\Nacionalidade;
@@ -23,6 +26,30 @@ class AuthController extends Controller
         // Pasar la variable $generos a la vista
         return view('registro', compact('generos', 'nacionalidades'));
     }
+
+    public function verificarEmail($token)
+    {
+        $token = Token::where('Token', $token)
+                     ->where('TipoToken', 'verify')
+                     ->where('Usado', 0)
+                     ->where('TiempoExpiracion', '>', now())
+                     ->first();
+
+        if (!$token) {
+            return redirect()->route('login')
+                ->with('error', 'Token de verificación inválido o expirado');
+        }
+
+        $usuario = $token->usuario;
+        
+        // Marcar el token como usado
+        $token->Usado = 1;
+        $token->save();
+
+        return redirect()->route('login')
+            ->with('success', 'Email verificado correctamente. Ya puedes iniciar sesión.');
+    }
+    
     public function register(Request $request)
     {
         
@@ -124,6 +151,7 @@ class AuthController extends Controller
         return redirect()->back()->withErrors($validator)->withInput();
     }
 
+    $token = Str::random(64);
         // Crear el usuario
     $usuario = Usuario::create([
         'NombreUsuario' => $request->NombreUsuario,
@@ -138,7 +166,9 @@ class AuthController extends Controller
         'Nacionalidades_idNacionalidad' => $request->Nacionalidades_idNacionalidad,
     ]);
 
-    
+    if (!$usuario || !$usuario->idUsuario) {  // Asegúrate que este es el nombre correcto de tu columna ID
+        return redirect()->back()->with('error', 'Error al crear el usuario');
+    }
 
     // Crear las redes sociales si existen
     if ($request->has('sitio_web')) {
@@ -180,9 +210,22 @@ class AuthController extends Controller
             'Usuarios_idUsuario' => $usuario->idUsuario,
         ]);
     }
+ // En tu AuthController, modifica esta parte:
+$token = Token::create([
+    'Usuarios_idUsuario' => $usuario->idUsuario,
+    'Token' => Str::random(64),
+    'TipoToken' => 'verify',  // Cambiado de 'email_verification' a 'verify'
+    'TiempoExpiracion' => now()->addHours(24),
+    'Usado' => 0
+]);
+
+// Enviar email
+// Enviar email
+Mail::to($usuario->CorreoUsuario)->send(new VerifyEmail($usuario, $token->Token));
+
 
     // Redirigir al formulario de registro o mostrar un mensaje de éxito
-    return redirect()->route('registro')->with('success', 'Registro completado exitosamente');
+    return redirect()->route('registro')->with('success', 'Por favor revisa tu email para verificar tu cuenta.');
 }
 
 
@@ -245,4 +288,7 @@ public function showPasswordRecoveryForm()
 {
     return view('recuperar-contrasena'); // Ajusta la ruta de la vista según sea necesario
 }
+
+
+
 }

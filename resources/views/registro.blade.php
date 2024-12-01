@@ -405,6 +405,7 @@ document.addEventListener('DOMContentLoaded', function() {
         Swal.fire({
             icon: 'success',
             title: '¡Registro Exitoso!',
+            text: 'Se ha enviado un correo de confirmación a tu correo',
             confirmButtonText: 'Aceptar'
         });
     </script>

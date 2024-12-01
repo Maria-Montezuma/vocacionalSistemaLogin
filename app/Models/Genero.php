@@ -21,13 +21,13 @@ use Illuminate\Database\Eloquent\Model;
  */
 class Genero extends Model
 {
-    protected $table = 'generos';
-    protected $primaryKey = 'idGenero';
-    public $timestamps = false;
+	protected $table = 'generos';
+	protected $primaryKey = 'idGenero';
+	public $timestamps = false;
 
-    protected $fillable = [
-        'NombreGenero'
-    ];
+	protected $fillable = [
+		'NombreGenero'
+	];
 
 	public function usuarios()
 	{
