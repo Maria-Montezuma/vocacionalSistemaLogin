@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\RespuestaSeguridadController;
 use App\Http\Controllers\RecuperarContrasenaController;
 
 
@@ -61,6 +62,8 @@ Route::post('/reset-password', [RecuperarContrasenaController::class, 'resetPass
 
     
 
+
+    Route::post('/respuesta-seguridad/store', [RespuestaSeguridadController::class, 'store'])->name('respuesta-seguridad.store');
 
 
 
