@@ -57,108 +57,48 @@ class AuthController extends Controller
     }
     
     public function register(Request $request)
-    {
-        
-        // Validación de los datos del formulario
-        $validator = Validator::make($request->all(), [
-            'NombreUsuario' => 'required|string|max:255',
-            'ApellidoUsuario' => 'required|string|max:255',
-            'CorreoUsuario' => 'required|email|unique:usuarios,CorreoUsuario',
-            'ContrasenaUsuario' => 'required|string|min:8|confirmed',
-            'FechaNacimientoUsuario' => 'required|date',
-            'CedulaUsuario' => 'required|numeric|unique:usuarios,CedulaUsuario',
-            'Nacionalidades_idNacionalidad' => [
-        'required', 
-        'exists:nacionalidades,idNacionalidad',
-        // Agrega esta nueva regla personalizada
-        function($attribute, $value, $fail)  use ($request) {
-            // Verifica si ya existe un usuario con esta nacionalidad
-            $existingUser = Usuario::where('CorreoUsuario', $request->CorreoUsuario)
-                ->where('Nacionalidades_idNacionalidad', $value)
-                ->first();
-            
-            if ($existingUser) {
-                $fail('Ya existe un usuario registrado con esta nacionalidad.');
+{
+    // Validación de los datos del formulario
+    $validator = Validator::make($request->all(), [
+        'NombreUsuario' => 'required|string|max:255',
+        'ApellidoUsuario' => 'required|string|max:255',
+        'CorreoUsuario' => 'required|email|unique:usuarios,CorreoUsuario',
+        'ContrasenaUsuario' => 'required|string|min:8|confirmed',
+        'FechaNacimientoUsuario' => 'required|date',
+        'CedulaUsuario' => 'required|numeric|unique:usuarios,CedulaUsuario',
+        'Nacionalidades_idNacionalidad' => [
+            'required', 
+            'exists:nacionalidades,idNacionalidad',
+            // Agrega esta nueva regla personalizada
+            function($attribute, $value, $fail)  use ($request) {
+                // Verifica si ya existe un usuario con esta nacionalidad
+                $existingUser = Usuario::where('CorreoUsuario', $request->CorreoUsuario)
+                    ->where('Nacionalidades_idNacionalidad', $value)
+                    ->first();
+                
+                if ($existingUser) {
+                    $fail('Ya existe un usuario registrado con esta nacionalidad.');
+                }
             }
-        }
-    ],
-            'DireccionUsuario' => 'required|string|max:255',
-            'DescripcionUsuario' => 'required|string|max:255',
-            'Generos_idGenero' => 'required|exists:generos,idGenero',
-            'Nacionalidades_idNacionalidad' => 'required|exists:nacionalidades,idNacionalidad',
-            'FechaNacimientoUsuario' => 'required|date|before_or_equal:' . now()->subYears(15)->toDateString(),
-            'sitio_web' => 'nullable|url',
-            'facebook' => 'nullable|url',
-            'instagram' => 'nullable|string',
-            'twitter' => 'nullable|string',
-            'tiktok' => 'nullable|string',
-        ], [
-            'NombreUsuario.required' => 'El nombre de usuario es obligatorio.',
-            'NombreUsuario.string' => 'El nombre de usuario debe ser un texto.',
-            'NombreUsuario.max' => 'El nombre de usuario no puede exceder los 255 caracteres.',
-            
-            'ApellidoUsuario.required' => 'El apellido de usuario es obligatorio.',
-            'ApellidoUsuario.string' => 'El apellido de usuario debe ser un texto.',
-            'ApellidoUsuario.max' => 'El apellido de usuario no puede exceder los 255 caracteres.',
-            
-            'CorreoUsuario.required' => 'El correo electrónico es obligatorio.',
-            'CorreoUsuario.email' => 'El correo electrónico debe tener un formato válido.',
-            'CorreoUsuario.unique' => 'El correo electrónico ya está registrado.',
-            
-            'ContrasenaUsuario.required' => 'La contraseña es obligatoria.',
-            'ContrasenaUsuario.string' => 'La contraseña debe ser un texto.',
-            'ContrasenaUsuario.min' => 'La contraseña debe tener al menos 8 caracteres.',
-            'ContrasenaUsuario.confirmed' => 'Las contraseñas no coinciden.',
-            
-            'FechaNacimientoUsuario.required' => 'La fecha de nacimiento es obligatoria.',
-            'FechaNacimientoUsuario.date' => 'La fecha de nacimiento debe ser una fecha válida.',
-            
-            'CedulaUsuario.required' => 'La cédula es obligatoria.',
-            'CedulaUsuario.numeric' => 'La cédula debe ser un número.',
-            'CedulaUsuario.unique' => 'La cédula ingresada ya está registrada. Por favor, ingrese una cédula diferente.',
-            
-            'DireccionUsuario.required' => 'La dirección es obligatoria.',
-            'DireccionUsuario.string' => 'La dirección debe ser un texto.',
-            'DireccionUsuario.max' => 'La dirección no puede exceder los 255 caracteres.',
-            
-            'DescripcionUsuario.required' => 'La descripción es obligatoria.',
-            'DescripcionUsuario.string' => 'La descripción debe ser un texto.',
-            'DescripcionUsuario.max' => 'La descripción no puede exceder los 255 caracteres.',
-            
-            'Generos_idGenero.required' => 'El género es obligatorio.',
-            'Generos_idGenero.exists' => 'El género seleccionado no es válido.',
-            
-            'Nacionalidades_idNacionalidad.required' => 'La nacionalidad es obligatoria.',
-            'Nacionalidades_idNacionalidad.exists' => 'La nacionalidad seleccionada no es válida.',
-            'Nacionalidades_idNacionalidad.required' => 'La nacionalidad es obligatoria.',
+        ],
+        'DireccionUsuario' => 'required|string|max:255',
+        'DescripcionUsuario' => 'required|string|max:255',
+        'Generos_idGenero' => 'required|exists:generos,idGenero',
+        'Nacionalidades_idNacionalidad' => 'required|exists:nacionalidades,idNacionalidad',
+        'FechaNacimientoUsuario' => 'required|date|before_or_equal:' . now()->subYears(15)->toDateString(),
+        'sitio_web' => 'nullable|url',
+        'facebook' => 'nullable|url',
+        'instagram' => 'nullable|string',
+        'twitter' => 'nullable|string',
+        'tiktok' => 'nullable|string',
+    ]);
 
-            'FechaNacimientoUsuario' => 'Usted no cumple con el requisito de edad para registrarse',
-            
-            'sitio_web.url' => 'El sitio web debe tener un formato de URL válido.',
-            'sitio_web.unique' => 'El sitio web ya está registrado. Por favor, ingrese una URL diferente.',
-            
-            'facebook.url' => 'El enlace de Facebook debe tener un formato de URL válido.',
-            'facebook.unique' => 'El enlace de Facebook ya está registrado.',
-            
-            'instagram.string' => 'El enlace de Instagram debe ser un texto.',
-            'instagram.unique' => 'El enlace de Instagram ya está registrado.',
-            
-            'twitter.string' => 'El enlace de Twitter debe ser un texto.',
-            'twitter.unique' => 'El enlace de Twitter ya está registrado.',
-            
-            'tiktok.string' => 'El enlace de TikTok debe ser un texto.',
-            'tiktok.unique' => 'El enlace de TikTok ya está registrado.',
-        ]);
-
-        // Si la validación falla, redirige con errores
-    
-        // Si la validación falla, redirige con errores
+    // Si la validación falla, redirige con errores
     if ($validator->fails()) {
         return redirect()->back()->withErrors($validator)->withInput();
     }
 
-    $token = Str::random(64);
-        // Crear el usuario
+    // Crear el usuario
     $usuario = Usuario::create([
         'NombreUsuario' => $request->NombreUsuario,
         'ApellidoUsuario' => $request->ApellidoUsuario,
@@ -170,6 +110,7 @@ class AuthController extends Controller
         'DescripcionUsuario' => $request->DescripcionUsuario,
         'Generos_idGenero' => $request->Generos_idGenero,
         'Nacionalidades_idNacionalidad' => $request->Nacionalidades_idNacionalidad,
+        'verificado' => 0,  // Usuario no verificado por defecto
     ]);
 
     if (!$usuario || !$usuario->idUsuario) {  // Asegúrate que este es el nombre correcto de tu columna ID
@@ -216,7 +157,8 @@ class AuthController extends Controller
             'Usuarios_idUsuario' => $usuario->idUsuario,
         ]);
     }
- // En tu AuthController, modifica esta parte:
+
+    // Crear el token de verificación
     $token = Token::create([
         'Usuarios_idUsuario' => $usuario->idUsuario,
         'Token' => Str::random(64),
@@ -225,15 +167,12 @@ class AuthController extends Controller
         'Usado' => 0,  // Indica que no ha sido utilizado aún
     ]);
 
-// Enviar email
-Mail::to($usuario->CorreoUsuario)->send(new VerifyEmail($usuario, $token->Token));
+    // Enviar el correo de verificación
+    Mail::to($usuario->CorreoUsuario)->send(new VerifyEmail($usuario, $token->Token));
 
-
-
-    // Redirigir al formulario de registro o mostrar un mensaje de éxito
+    // Redirigir al formulario de registro con un mensaje
     return redirect()->route('registro')->with('success', 'Por favor revisa tu email para verificar tu cuenta.');
 }
-
 
 public function login(Request $request)
 {
@@ -244,14 +183,23 @@ public function login(Request $request)
 
     $usuario = Usuario::where('CorreoUsuario', $request->CorreoUsuario)->first();
 
-    if ($usuario && Hash::check($request->ContrasenaUsuario, $usuario->ContrasenaUsuario)) {
-        session([
-            'usuario_id' => $usuario->idUsuario,
-            'usuario_nombre' => $usuario->NombreUsuario,
-            'usuario_email' => $usuario->CorreoUsuario
-        ]);
-        
-        return redirect()->route('perfil');
+    if ($usuario) {
+        // Verificar si el usuario está verificado
+        if ($usuario->verificado == 0) {
+            return back()->withErrors([
+                'CorreoUsuario' => 'Debes verificar tu correo electrónico antes de iniciar sesión.'
+            ])->withInput();
+        }
+
+        if (Hash::check($request->ContrasenaUsuario, $usuario->ContrasenaUsuario)) {
+            session([
+                'usuario_id' => $usuario->idUsuario,
+                'usuario_nombre' => $usuario->NombreUsuario,
+                'usuario_email' => $usuario->CorreoUsuario
+            ]);
+
+            return redirect()->route('perfil');
+        }
     }
 
     return back()->withErrors([

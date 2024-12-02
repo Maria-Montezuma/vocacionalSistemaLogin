@@ -23,6 +23,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property string $DescripcionUsuario
  * @property int $Generos_idGenero
  * @property int $Nacionalidades_idNacionalidad
+ * @property bool $verificado
  * 
  * @property Genero $genero
  * @property Nacionalidade $nacionalidade
@@ -41,7 +42,8 @@ class Usuario extends Model
 	protected $casts = [
 		'CedulaUsuario' => 'int',
 		'Generos_idGenero' => 'int',
-		'Nacionalidades_idNacionalidad' => 'int'
+		'Nacionalidades_idNacionalidad' => 'int',
+		'verificado' => 'bool'
 	];
 
 	protected $fillable = [
@@ -54,7 +56,8 @@ class Usuario extends Model
 		'DireccionUsuario',
 		'DescripcionUsuario',
 		'Generos_idGenero',
-		'Nacionalidades_idNacionalidad'
+		'Nacionalidades_idNacionalidad',
+		'verificado'
 	];
 
 	public function genero()
