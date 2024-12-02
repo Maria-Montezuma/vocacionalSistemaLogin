@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\RespuestaSeguridadController;
 use App\Http\Controllers\RecuperarContrasenaController;
-
+use App\Mail\RecuperacionContrasena;
 
 // Página principal (redirige al formulario de registro)
 Route::get('/', [AuthController::class, 'showRegistrationForm'])->name('registro');
@@ -85,4 +85,9 @@ Route::get('/mostrar-preguntas/{userId}', [RecuperarContrasenaController::class,
 
 Route::post('/validar-respuestas', [RecuperarContrasenaController::class, 'validarRespuestas']);
 Route::post('/cambiar-contrasena', [RecuperarContrasenaController::class, 'cambiarContrasena']);
+
+Route::post('/validar-respuestas', [RecuperarContrasenaController::class, 'validarRespuestas'])->name('validar.respuestas');
+
+Route::get('/preguntas-seguridad/{userId}', [RecuperarContrasenaController::class, 'mostrarFormularioPreguntas'])->name('preguntas.seguridad');
+Route::post('/validar-respuestas', [RecuperarContrasenaController::class, 'validarRespuestas'])->name('validar.respuestas');
 

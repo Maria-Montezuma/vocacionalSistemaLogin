@@ -233,38 +233,35 @@ public function mostrarPreguntasSeguridad($userId)
 
 // Nuevo método para validar las respuestas
 public function validarRespuestas(Request $request)
-{
-    try {
-        $userId = $request->userId;
-        $respuestasUsuario = $request->respuestas;
+    {
+        try {
+            $userId = $request->userId;
+            $respuestasUsuario = $request->respuestas;
 
-        foreach ($respuestasUsuario as $respuesta) {
-            $respuestaDB = Respuestasseguridad::where('idRespuestasSeguridad', $respuesta['idRespuesta'])
-                ->where('Usuarios_idUsuario', $userId)
-                ->first();
+            foreach ($respuestasUsuario as $idRespuesta => $respuestaUsuario) {
+                $respuestaDB = DB::table('respuestasseguridad')
+                    ->where('idRespuestasSeguridad', $idRespuesta)
+                    ->where('Usuarios_idUsuario', $userId)
+                    ->first();
 
-            if (!$respuestaDB || $respuestaDB->Respuesta !== $respuesta['respuesta']) {
-                return response()->json([
-                    'status' => 'error',
-                    'message' => 'Las respuestas no coinciden'
-                ], 400);
+                if (!$respuestaDB) {
+                    return redirect()->back()
+                        ->with('error', 'No se encontró la respuesta #' . $idRespuesta);
+                }
+
+                if ($respuestaDB->RespuestaSeguridad_hash != $respuestaUsuario) {
+                    return redirect()->back()
+                        ->with('error', 'La respuesta #' . $idRespuesta . ' no es correcta');
+                }
             }
+
+            return redirect()->route('cambio.contrasena', ['userId' => $userId]);
+
+        } catch (\Exception $e) {
+            return redirect()->back()
+                ->with('error', 'Error al validar las respuestas: ' . $e->getMessage());
         }
-
-        return response()->json([
-            'status' => 'success',
-            'message' => 'Respuestas correctas',
-            'permitirCambioContrasena' => true
-        ]);
-
-    } catch (\Exception $e) {
-        return response()->json([
-            'status' => 'error',
-            'message' => 'Error al validar las respuestas: ' . $e->getMessage()
-        ], 500);
     }
-}
-
 // Método para cambiar la contraseña
 public function cambiarContrasena(Request $request)
 {
@@ -293,6 +290,29 @@ public function cambiarContrasena(Request $request)
             'status' => 'error',
             'message' => 'Error al cambiar la contraseña: ' . $e->getMessage()
         ], 500);
+    }
+}
+public function mostrarFormularioPreguntas($userId)
+{
+    try {
+        $preguntas = DB::table('respuestasseguridad')
+            ->select(
+                'respuestasseguridad.idRespuestasSeguridad',
+                'respuestasseguridad.PreguntasSeguridad_idPreguntasSeguridad',
+                'preguntasseguridad.PreguntasSeguridad'
+            )
+            ->join('preguntasseguridad', 'respuestasseguridad.PreguntasSeguridad_idPreguntasSeguridad', '=', 'preguntasseguridad.idPreguntasSeguridad')
+            ->where('respuestasseguridad.Usuarios_idUsuario', $userId)
+            ->get();
+
+        if ($preguntas->isEmpty()) {
+            return redirect()->back()->with('error', 'No hay preguntas configuradas para este usuario.');
+        }
+
+        return view('preguntas-seguridad', compact('preguntas', 'userId'));
+
+    } catch (\Exception $e) {
+        return redirect()->back()->with('error', 'Error al cargar las preguntas.');
     }
 }
 }
