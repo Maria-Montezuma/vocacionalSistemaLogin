@@ -3,267 +3,324 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="{{ asset('css/style.css') }}"> 
-    <title>Mi Perfil</title>
+    <!-- <link rel="stylesheet" href="{{ asset('css/style.css') }}"> -->
+    <title>Mi Perfil Profesional</title>
     <style>
+        :root {
+            --primary-color: #2c3e50;
+            --secondary-color: #34495e;
+            --accent-color: #3498db;
+            --light-color: #ecf0f1;
+            --danger-color: #e74c3c;
+            --success-color: #27ae60;
+            --text-primary: #2c3e50;
+            --text-secondary: #7f8c8d;
+            --border-color: #bdc3c7;
+        }
+
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: #f5f6fa;
+            color: var(--text-primary);
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+        }
+
         .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 20px;
+            max-width: 1000px;
+            margin: 2rem auto;
+            background: white;
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
         }
 
         .profile-card {
-            background-color: white;
-            border-radius: 10px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-            padding: 20px;
+            display: grid;
+            grid-template-columns: 300px 1fr;
+            min-height: 100vh;
         }
 
-        .profile-header {
-            display: flex;
-            align-items: center;
-            margin-bottom: 30px;
+        .profile-sidebar {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 2rem;
+        }
+
+        .profile-main {
+            padding: 2rem;
         }
 
         .profile-pic {
-            width: 100px;
-            height: 100px;
+            width: 200px;
+            height: 200px;
             border-radius: 50%;
-            background-color: #e9ecef;
-            margin-right: 20px;
+            border: 5px solid var(--accent-color);
+            margin: 0 auto 2rem;
+            background-color: var(--light-color);
+            display: block;
+        }
+
+        .profile-info {
+            text-align: center;
+            margin-bottom: 2rem;
         }
 
         .profile-info h1 {
+            font-size: 1.8rem;
             margin: 0;
-            color: #333;
+            color: white;
         }
 
         .profile-info p {
-            margin: 5px 0;
-            color: #666;
+            color: var(--light-color);
+            margin: 0.5rem 0;
+            font-size: 1rem;
         }
 
-        .profile-details {
-            margin-bottom: 30px;
+        .section-title {
+            font-size: 1.5rem;
+            color: var(--accent-color);
+            border-bottom: 2px solid var(--accent-color);
+            padding-bottom: 0.5rem;
+            margin: 2rem 0 1rem;
         }
 
         .detail-item {
-            margin-bottom: 15px;
+            margin-bottom: 1.5rem;
         }
 
-        .description {
-            margin-top: 20px;
+        .detail-item strong {
+            display: block;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 0.3rem;
+        }
+
+        .detail-item p {
+            margin: 0;
+            color: var(--text-primary);
+        }
+
+        .btn {
+            width: 100%;
+            padding: 0.8rem;
+            border: none;
+            border-radius: 4px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.9rem;
+            text-align: center;
+            margin: 0.5rem 0;
         }
 
         .logout-btn {
-            background-color: #dc3545;
+            background-color: var(--danger-color);
             color: white;
-            padding: 10px 20px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 16px;
-            transition: background-color 0.3s;
         }
 
         .logout-btn:hover {
-            background-color: #c82333;
+            background-color: #c0392b;
         }
 
         .btn-toggle {
-            background-color: #007bff;
+            background-color: var(--accent-color);
             color: white;
-            padding: 10px 20px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            margin-top: 20px;
-            font-size: 16px;
-            transition: background-color 0.3s;
         }
 
         .btn-toggle:hover {
-            background-color: #0056b3;
+            background-color: #2980b9;
         }
 
         .security-questions {
-            margin-top: 20px;
-            padding: 20px;
-            background-color: #f8f9fa;
-            border-radius: 5px;
+            background-color: var(--light-color);
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin-top: 1.5rem;
         }
 
         .form-group {
-            margin-bottom: 20px;
+            margin-bottom: 1.5rem;
         }
 
         .form-group label {
             display: block;
-            margin-bottom: 5px;
-            color: #333;
+            margin-bottom: 0.5rem;
+            color: var(--text-primary);
+            font-weight: 500;
         }
 
-        .form-group select,
-        .form-group input {
+        .form-control {
             width: 100%;
-            padding: 8px;
-            border: 1px solid #ddd;
+            padding: 0.8rem;
+            border: 1px solid var(--border-color);
             border-radius: 4px;
-            font-size: 16px;
+            font-size: 0.9rem;
+            transition: border-color 0.3s ease;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--accent-color);
         }
 
         .submit-btn {
-            background-color: #28a745;
+            background-color: var(--success-color);
             color: white;
-            padding: 10px 20px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 16px;
-            transition: background-color 0.3s;
         }
 
         .submit-btn:hover {
-            background-color: #218838;
+            background-color: #219a52;
         }
 
         .error-message {
-            color: #dc3545;
-            font-size: 14px;
-            margin-top: 5px;
+            color: var(--danger-color);
+            font-size: 0.8rem;
+            margin-top: 0.5rem;
             display: none;
         }
 
-        .current-questions {
-            margin: 20px 0;
-            padding: 15px;
-            background-color: #f8f9fa;
-            border-radius: 5px;
-            border: 1px solid #dee2e6;
+        .contact-info {
+            margin-top: 2rem;
         }
 
-        .current-questions h3 {
-            color: #333;
-            margin-bottom: 15px;
+        .contact-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 1rem;
+            color: var(--light-color);
         }
 
-        .question-item {
-            margin-bottom: 10px;
-            padding: 8px;
-            background-color: white;
-            border-radius: 4px;
-            border-left: 3px solid #007bff;
+        .contact-item i {
+            margin-right: 0.5rem;
+            color: var(--accent-color);
         }
 
-        .no-questions {
-            color: #6c757d;
-            font-style: italic;
+        @media (max-width: 768px) {
+            .profile-card {
+                grid-template-columns: 1fr;
+            }
+
+            .profile-pic {
+                width: 150px;
+                height: 150px;
+            }
+
+            .container {
+                margin: 0;
+            }
         }
     </style>
 </head>
 <body>
     <div class="container">
         <div class="profile-card">
-            <div class="profile-header">
+            <div class="profile-sidebar">
                 <div class="profile-pic"></div>
                 <div class="profile-info">
                     <h1>{{ session('NombreUsuario') }} {{ session('ApellidoUsuario') }}</h1>
                     <p>{{ session('CorreoUsuario') }}</p>
                 </div>
+
+                <div class="contact-info">
+                    <div class="section-title">Información de Contacto</div>
+                    <div class="contact-item">
+                        <i class="fas fa-envelope"></i>
+                        {{ $usuario->CorreoUsuario }}
+                    </div>
+                    <div class="contact-item">
+                        <i class="fas fa-map-marker-alt"></i>
+                        {{ $usuario->DireccionUsuario }}
+                    </div>
+                    <div class="contact-item">
+                        <i class="fas fa-venus-mars"></i>
+                        {{ $genero }}
+                    </div>
+                </div>
+
+                <form action="{{ route('logout') }}" method="POST">
+                    @csrf
+                    <button type="submit" class="btn logout-btn">Cerrar Sesión</button>
+                </form>
             </div>
 
-            <div class="profile-details">
-                <div class="detail-item">
-                    <strong>Nombre Completo:</strong> {{ $usuario->NombreUsuario }} {{ $usuario->ApellidoUsuario }}
-                </div>
-                <div class="detail-item">
-                    <strong>Correo:</strong> {{ $usuario->CorreoUsuario }}
-                </div>
-                <div class="detail-item">
-                    <strong>Dirección:</strong> {{ $usuario->DireccionUsuario }}
-                </div>
-                <div class="detail-item">
-                    <strong>Género:</strong> {{ $genero }}
-                </div>
+            <div class="profile-main">
+                <div class="section-title">Perfil Profesional</div>
                 <div class="description">
-                    <strong>Descripción:</strong>
                     <p>{{ $usuario->DescripcionUsuario }}</p>
                 </div>
-            </div>
 
-            <form action="{{ route('logout') }}" method="POST" style="display: inline;">
-                @csrf
-                <button type="submit" class="logout-btn">Cerrar Sesión</button>
-            </form>
+                <button id="toggle-questions" class="btn btn-toggle">
+                    @if(isset($respuestasSeguridad) && count($respuestasSeguridad) > 0)
+                        Actualizar Preguntas de Seguridad
+                    @else
+                        Configurar Preguntas de Seguridad
+                    @endif
+                </button>
 
-            <button id="toggle-questions" class="btn-toggle">
-                @if(isset($respuestasSeguridad) && count($respuestasSeguridad) > 0)
-                    Actualizar Preguntas de Seguridad
-                @else
-                    Configurar Preguntas de Seguridad
-                @endif
-            </button>
-            
-            <div id="questions-section" class="security-questions" style="display: none;">
-                <form action="{{ route('respuesta-seguridad.store') }}" method="POST" id="security-questions-form">
-                    @csrf
-                    <!-- Primera pregunta -->
-                    <div class="form-group">
-                        <label for="pregunta1">Pregunta 1:</label>
-                        <select id="pregunta1" name="preguntas[0][PreguntasSeguridad_idPreguntasSeguridad]" class="question-select" required>
-                            <option value="">Selecciona una pregunta</option>
-                            @foreach($preguntas as $pregunta)
-                                <option value="{{ $pregunta->idPreguntasSeguridad }}">
-                                    {{ $pregunta->PreguntasSeguridad }}
-                                </option>
-                            @endforeach
-                        </select>
-                        <div class="error-message" id="error-pregunta1"></div>
-                    </div>
-                    <div class="form-group">
-                        <label for="respuesta1">Respuesta 1:</label>
-                        <input type="text" id="respuesta1" name="preguntas[0][RespuestaSeguridad_hash]" required>
-                    </div>
+                <div id="questions-section" class="security-questions" style="display: none;">
+                    <form action="{{ route('respuesta-seguridad.store') }}" method="POST" id="security-questions-form">
+                        @csrf
+                        <!-- Primera pregunta -->
+                        <div class="form-group">
+                            <label for="pregunta1">Pregunta 1:</label>
+                            <select id="pregunta1" name="preguntas[0][PreguntasSeguridad_idPreguntasSeguridad]" class="form-control question-select" required>
+                                <option value="">Selecciona una pregunta</option>
+                                @foreach($preguntas as $pregunta)
+                                    <option value="{{ $pregunta->idPreguntasSeguridad }}">
+                                        {{ $pregunta->PreguntasSeguridad }}
+                                    </option>
+                                @endforeach
+                            </select>
+                            <div class="error-message" id="error-pregunta1"></div>
+                        </div>
+                        <div class="form-group">
+                            <label for="respuesta1">Respuesta 1:</label>
+                            <input type="text" id="respuesta1" name="preguntas[0][RespuestaSeguridad_hash]" class="form-control" required>
+                        </div>
 
-                    <!-- Segunda pregunta -->
-                    <div class="form-group">
-                        <label for="pregunta2">Pregunta 2:</label>
-                        <select id="pregunta2" name="preguntas[1][PreguntasSeguridad_idPreguntasSeguridad]" class="question-select" required>
-                            <option value="">Selecciona una pregunta</option>
-                            @foreach($preguntas as $pregunta)
-                                <option value="{{ $pregunta->idPreguntasSeguridad }}">
-                                    {{ $pregunta->PreguntasSeguridad }}
-                                </option>
-                            @endforeach
-                        </select>
-                        <div class="error-message" id="error-pregunta2"></div>
-                    </div>
-                    <div class="form-group">
-                        <label for="respuesta2">Respuesta 2:</label>
-                        <input type="text" id="respuesta2" name="preguntas[1][RespuestaSeguridad_hash]" required>
-                    </div>
+                        <!-- Segunda pregunta -->
+                        <div class="form-group">
+                            <label for="pregunta2">Pregunta 2:</label>
+                            <select id="pregunta2" name="preguntas[1][PreguntasSeguridad_idPreguntasSeguridad]" class="form-control question-select" required>
+                                <option value="">Selecciona una pregunta</option>
+                                @foreach($preguntas as $pregunta)
+                                    <option value="{{ $pregunta->idPreguntasSeguridad }}">
+                                        {{ $pregunta->PreguntasSeguridad }}
+                                    </option>
+                                @endforeach
+                            </select>
+                            <div class="error-message" id="error-pregunta2"></div>
+                        </div>
+                        <div class="form-group">
+                            <label for="respuesta2">Respuesta 2:</label>
+                            <input type="text" id="respuesta2" name="preguntas[1][RespuestaSeguridad_hash]" class="form-control" required>
+                        </div>
 
-                    <!-- Tercera pregunta -->
-                    <div class="form-group">
-                        <label for="pregunta3">Pregunta 3:</label>
-                        <select id="pregunta3" name="preguntas[2][PreguntasSeguridad_idPreguntasSeguridad]" class="question-select" required>
-                            <option value="">Selecciona una pregunta</option>
-                            @foreach($preguntas as $pregunta)
-                                <option value="{{ $pregunta->idPreguntasSeguridad }}">
-                                    {{ $pregunta->PreguntasSeguridad }}
-                                </option>
-                            @endforeach
-                        </select>
-                        <div class="error-message" id="error-pregunta3"></div>
-                    </div>
-                    <div class="form-group">
-                        <label for="respuesta3">Respuesta 3:</label>
-                        <input type="text" id="respuesta3" name="preguntas[2][RespuestaSeguridad_hash]" required>
-                    </div>
+                        <!-- Tercera pregunta -->
+                        <div class="form-group">
+                            <label for="pregunta3">Pregunta 3:</label>
+                            <select id="pregunta3" name="preguntas[2][PreguntasSeguridad_idPreguntasSeguridad]" class="form-control question-select" required>
+                                <option value="">Selecciona una pregunta</option>
+                                @foreach($preguntas as $pregunta)
+                                    <option value="{{ $pregunta->idPreguntasSeguridad }}">
+                                        {{ $pregunta->PreguntasSeguridad }}
+                                    </option>
+                                @endforeach
+                            </select>
+                            <div class="error-message" id="error-pregunta3"></div>
+                        </div>
+                        <div class="form-group">
+                            <label for="respuesta3">Respuesta 3:</label>
+                            <input type="text" id="respuesta3" name="preguntas[2][RespuestaSeguridad_hash]" class="form-control" required>
+                        </div>
 
-                    <input type="hidden" name="Usuarios_idUsuario" value="{{ $usuario->idUsuario }}">
-                    <button type="submit" class="submit-btn">Guardar Respuestas</button>
-                </form>
+                        <input type="hidden" name="Usuarios_idUsuario" value="{{ $usuario->idUsuario }}">
+                        <button type="submit" class="btn submit-btn">Guardar Respuestas</button>
+                    </form>
+                </div>
             </div>
         </div>
     </div>

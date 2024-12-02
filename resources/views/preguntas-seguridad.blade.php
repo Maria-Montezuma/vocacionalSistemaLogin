@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Preguntas de Seguridad</title>
+    
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
         .pregunta-container {
@@ -43,6 +44,17 @@
         .btn-primary:active {
             background-color: #f79840 !important;
             border-color: #f79840 !important;
+        }
+        .otro-metodo {
+            text-align: center;
+            margin-top: 20px;
+        }
+        .otro-metodo a {
+            color: #e2740e;
+            text-decoration: none;
+        }
+        .otro-metodo a:hover {
+            text-decoration: underline;
         }
     </style>
 </head>
@@ -91,6 +103,10 @@
                     </button>
                 </div>
             </form>
+
+            <div class="otro-metodo">
+                <a href="{{ route('recuperar-contraseña') }}">Probar otro método de recuperación</a>
+            </div>
         </div>
     </div>
 

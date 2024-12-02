@@ -20,16 +20,29 @@ class RespuestaSeguridadController extends Controller
         ]);
 
         foreach ($request->preguntas as $pregunta) {
-            Respuestasseguridad::create([
-                'RespuestaSeguridad_hash' => Hash::make($pregunta['RespuestaSeguridad_hash']),
+            // Buscar si existe una respuesta previa
+            $respuestaExistente = Respuestasseguridad::where([
                 'PreguntasSeguridad_idPreguntasSeguridad' => $pregunta['PreguntasSeguridad_idPreguntasSeguridad'],
                 'Usuarios_idUsuario' => $request->Usuarios_idUsuario
-            ]);
+            ])->first();
+
+            if ($respuestaExistente) {
+                // Actualizar respuesta existente
+                $respuestaExistente->update([
+                    'RespuestaSeguridad_hash' => Hash::make($pregunta['RespuestaSeguridad_hash'])
+                ]);
+            } else {
+                // Crear nueva respuesta
+                Respuestasseguridad::create([
+                    'RespuestaSeguridad_hash' => Hash::make($pregunta['RespuestaSeguridad_hash']),
+                    'PreguntasSeguridad_idPreguntasSeguridad' => $pregunta['PreguntasSeguridad_idPreguntasSeguridad'],
+                    'Usuarios_idUsuario' => $request->Usuarios_idUsuario
+                ]);
+            }
         }
 
-        return redirect()->back()->with('success', 'Respuestas guardadas exitosamente');
+        return redirect()->back()->with('success', 'Respuestas actualizadas exitosamente');
     }
-
     public function verificarRespuesta(Request $request)
     {
         $request->validate([
