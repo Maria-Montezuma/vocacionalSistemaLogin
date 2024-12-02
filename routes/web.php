@@ -91,3 +91,7 @@ Route::post('/validar-respuestas', [RecuperarContrasenaController::class, 'valid
 Route::get('/preguntas-seguridad/{userId}', [RecuperarContrasenaController::class, 'mostrarFormularioPreguntas'])->name('preguntas.seguridad');
 Route::post('/validar-respuestas', [RecuperarContrasenaController::class, 'validarRespuestas'])->name('validar.respuestas');
 
+Route::get('/cambio-contrasena/{userId}', [RecuperarContrasenaController::class, 'mostrarFormularioCambioContrasena'])->name('cambio.contrasena');
+Route::post('/actualizar-contrasena', [RecuperarContrasenaController::class, 'actualizarContrasena'])->name('actualizar.contrasena');
+
+

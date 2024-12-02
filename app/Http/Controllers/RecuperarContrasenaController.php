@@ -249,19 +249,20 @@ public function validarRespuestas(Request $request)
                         ->with('error', 'No se encontró la respuesta #' . $idRespuesta);
                 }
 
-                if ($respuestaDB->RespuestaSeguridad_hash != $respuestaUsuario) {
+                if (!Hash::check($respuestaUsuario, $respuestaDB->RespuestaSeguridad_hash)) {
                     return redirect()->back()
                         ->with('error', 'La respuesta #' . $idRespuesta . ' no es correcta');
                 }
             }
 
-            return redirect()->route('cambio.contrasena', ['userId' => $userId]);
+            return redirect("/cambio-contrasena/{$userId}");
 
         } catch (\Exception $e) {
             return redirect()->back()
                 ->with('error', 'Error al validar las respuestas: ' . $e->getMessage());
         }
     }
+
 // Método para cambiar la contraseña
 public function cambiarContrasena(Request $request)
 {
@@ -277,7 +278,7 @@ public function cambiarContrasena(Request $request)
             ], 404);
         }
 
-        $usuario->password = bcrypt($nuevaContrasena);
+        $usuario->ContrasenaUsuario = Hash::make($nuevaContrasena);
         $usuario->save();
 
         return response()->json([
@@ -286,6 +287,7 @@ public function cambiarContrasena(Request $request)
         ]);
 
     } catch (\Exception $e) {
+        logger('Error al cambiar contraseña: ' . $e->getMessage());
         return response()->json([
             'status' => 'error',
             'message' => 'Error al cambiar la contraseña: ' . $e->getMessage()
@@ -313,6 +315,39 @@ public function mostrarFormularioPreguntas($userId)
 
     } catch (\Exception $e) {
         return redirect()->back()->with('error', 'Error al cargar las preguntas.');
+    }
+}
+
+public function mostrarFormularioCambioContrasena($userId)
+    {
+        return view('cambio-contrasena', compact('userId'));
+    }
+
+    public function actualizarContrasena(Request $request)
+{
+    $request->validate([
+        'userId' => 'required',
+        'password' => 'required|min:8|confirmed',
+    ]);
+
+    try {
+        $usuario = Usuario::find($request->userId);
+        
+        if (!$usuario) {
+            return redirect()->back()
+                ->with('error', 'Usuario no encontrado');
+        }
+
+        $usuario->ContrasenaUsuario = Hash::make($request->password);
+        $usuario->save();
+
+        return redirect('/login')
+            ->with('success', 'Contraseña actualizada correctamente');
+
+    } catch (\Exception $e) {
+        logger('Error al actualizar contraseña: ' . $e->getMessage());
+        return redirect()->back()
+            ->with('error', 'Error al actualizar la contraseña');
     }
 }
 }
