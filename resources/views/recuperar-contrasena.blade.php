@@ -7,6 +7,11 @@
     <title>Recuperar Contraseña</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
+        :root {
+            --orange-primary: #e2740e;
+            --orange-hover: #f79840;
+        }
+
         body {
             background-color: #f8f9fa;
             height: 100vh;
@@ -14,6 +19,7 @@
             align-items: center;
             justify-content: center;
         }
+
         .recovery-container {
             background: white;
             padding: 2rem;
@@ -22,19 +28,31 @@
             max-width: 400px;
             width: 100%;
         }
+
         .form-group {
             margin-bottom: 1rem;
         }
+
         .btn-primary {
             width: 100%;
             padding: 10px;
             margin-top: 1rem;
+            background-color: #e2740e;
+            border-color: var(--orange-primary);
         }
+
+        .btn-primary:hover {
+            background-color: var(--orange-hover);
+            border-color: var(--orange-hover);
+            background: #e2740e;
+        }
+
         .recovery-options {
             display: flex;
             gap: 1rem;
             margin-bottom: 1rem;
         }
+
         .recovery-option {
             flex: 1;
             text-align: center;
@@ -42,10 +60,31 @@
             border: 1px solid #dee2e6;
             border-radius: 5px;
             cursor: pointer;
+            transition: all 0.3s ease;
         }
+
+        .recovery-option:hover {
+            border-color: var(--orange-primary);
+        }
+
         .recovery-option.active {
-            background-color: #e9ecef;
-            border-color: #0d6efd;
+            background-color: var(--orange-primary);
+            border-color: var(--orange-primary);
+            color: white;
+        }
+
+        a {
+            color: var(--orange-primary);
+            text-decoration: none;
+        }
+
+        a:hover {
+            color: var(--orange-hover);
+        }
+
+        .form-control:focus {
+            border-color: var(--orange-primary);
+            box-shadow: 0 0 0 0.25rem rgba(255, 107, 0, 0.25);
         }
     </style>
 </head>
@@ -136,9 +175,9 @@
                 if (result.status === 'success') {
                     Swal.fire({
                         icon: 'success',
-                        title: 'Éxito',
-                        text: result.message,
-                        confirmButtonColor: '#3085d6'
+                title: 'Éxito',
+                text: result.message,
+                confirmButtonColor: '#FF6B00'
                     });
                     emailInput.value = '';
                 } else {
@@ -155,7 +194,7 @@
                     icon: 'error',
                     title: 'Error',
                     text: 'Ocurrió un error al enviar el enlace de recuperación.',
-                    confirmButtonColor: '#3085d6'
+                    confirmButtonColor: 'e2740e'
                 });
             }
         }
@@ -167,9 +206,9 @@
     if (!email) {
         Swal.fire({
             icon: 'error',
-            title: 'Error',
-            text: 'Por favor ingrese un correo electrónico',
-            confirmButtonColor: '#3085d6'
+                title: 'Error',
+                text: 'Por favor ingrese un correo electrónico',
+                confirmButtonColor: '#e2740e'
         });
         return;
     }

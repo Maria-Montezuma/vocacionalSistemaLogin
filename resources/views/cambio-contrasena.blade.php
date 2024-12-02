@@ -21,6 +21,18 @@
             text-align: center;
             margin-bottom: 30px;
         }
+        .btn-primary {
+            background-color: #e2740e;
+            border-color: #e2740e;
+        }
+        .btn-primary:hover {
+            background-color: #f79840;
+            border-color: #f79840;
+        }
+        .btn-primary:active {
+            background-color: #f79840 !important;
+            border-color: #f79840 !important;
+        }
     </style>
 </head>
 <body class="bg-light">

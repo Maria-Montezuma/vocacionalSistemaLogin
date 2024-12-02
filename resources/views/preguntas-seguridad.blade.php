@@ -27,6 +27,23 @@
             padding: 10px;
             margin-top: 20px;
         }
+        .btn-primary {
+            background-color: #e2740e;
+            border-color: #e2740e;
+        }
+        .btn-primary:hover {
+            background-color: #f79840;
+            border-color: #f79840;
+        }
+        .btn-primary:focus {
+            background-color: #f79840;
+            border-color: #f79840;
+            box-shadow: 0 0 0 0.25rem rgba(255, 107, 0, 0.25);
+        }
+        .btn-primary:active {
+            background-color: #f79840 !important;
+            border-color: #f79840 !important;
+        }
     </style>
 </head>
 <body class="bg-light">
