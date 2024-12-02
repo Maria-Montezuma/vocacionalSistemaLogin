@@ -120,108 +120,45 @@
     </div>
 
     <script>
-    // El JavaScript permanece igual
-    document.getElementById('toggle-questions').addEventListener('click', function() {
-        const questionsSection = document.getElementById('questions-section');
-        questionsSection.style.display = questionsSection.style.display === 'none' ? 'block' : 'none';
-    });
+        document.getElementById('toggle-questions').addEventListener('click', function() {
+            const questionsSection = document.getElementById('questions-section');
+            questionsSection.style.display = questionsSection.style.display === 'none' ? 'block' : 'none';
+        });
 
-    const selects = document.querySelectorAll('.question-select');
-    
-    function validateQuestions() {
-        const selectedValues = new Set();
-        let isValid = true;
+        const selects = document.querySelectorAll('.question-select');
         
-        document.querySelectorAll('.error-message').forEach(error => {
-            error.style.display = 'none';
-            error.textContent = '';
-        });
+        function validateQuestions() {
+            const selectedValues = new Set();
+            let isValid = true;
+            
+            document.querySelectorAll('.error-message').forEach(error => {
+                error.style.display = 'none';
+                error.textContent = '';
+            });
 
-        selects.forEach((select, index) => {
-            if (select.value) {
-                if (selectedValues.has(select.value)) {
-                    document.getElementById(`error-pregunta${index + 1}`).textContent = 'Por favor seleccione preguntas diferentes';
-                    document.getElementById(`error-pregunta${index + 1}`).style.display = 'block';
-                    isValid = false;
+            selects.forEach((select, index) => {
+                if (select.value) {
+                    if (selectedValues.has(select.value)) {
+                        document.getElementById(`error-pregunta${index + 1}`).textContent = 'Por favor seleccione preguntas diferentes';
+                        document.getElementById(`error-pregunta${index + 1}`).style.display = 'block';
+                        isValid = false;
+                    }
+                    selectedValues.add(select.value);
                 }
-                selectedValues.add(select.value);
-            }
-        });
+            });
 
-        return isValid;
-    }
-
-    document.getElementById('security-questions-form').addEventListener('submit', function(e) {
-        if (!validateQuestions()) {
-            e.preventDefault();
+            return isValid;
         }
-    });
 
-    selects.forEach(select => {
-        select.addEventListener('change', validateQuestions);
-    });
-
-    // Nueva funcionalidad para el botón de Cancelar
-    document.getElementById('cancelBtn').addEventListener('click', function() {
-        // Ocultar la sección de preguntas
-        const questionsSection = document.getElementById('questions-section');
-        questionsSection.style.display = 'none';
-
-        // Restablecer los valores de los campos del formulario
-        const form = document.getElementById('security-questions-form');
-        form.reset(); // Esto restablecerá todos los campos del formulario
-
-        // También puedes eliminar cualquier mensaje de error que aparezca
-        document.querySelectorAll('.error-message').forEach(error => {
-            error.style.display = 'none';
-            error.textContent = '';
-        });
-
-        // Habilitar todas las opciones de preguntas nuevamente
-        enableAllQuestions();
-    });
-
-    // Función para deshabilitar opciones de preguntas seleccionadas
-    function updateAvailableQuestions() {
-        const selectedValues = [];
-        
-        // Recopilar las preguntas seleccionadas
-        selects.forEach(select => {
-            if (select.value) {
-                selectedValues.push(select.value);
+        document.getElementById('security-questions-form').addEventListener('submit', function(e) {
+            if (!validateQuestions()) {
+                e.preventDefault();
             }
         });
 
-        // Habilitar todas las opciones y luego deshabilitar las seleccionadas
         selects.forEach(select => {
-            const options = select.querySelectorAll('option');
-            options.forEach(option => {
-                if (selectedValues.includes(option.value) && option.value !== '') {
-                    option.disabled = true;
-                } else {
-                    option.disabled = false;
-                }
-            });
+            select.addEventListener('change', validateQuestions);
         });
-    }
-
-    // Función para habilitar todas las preguntas (cuando se cancela o se reinicia el formulario)
-    function enableAllQuestions() {
-        selects.forEach(select => {
-            const options = select.querySelectorAll('option');
-            options.forEach(option => {
-                option.disabled = false;
-            });
-        });
-    }
-
-    // Agregar event listeners para actualizar las opciones disponibles cuando cambian
-    selects.forEach(select => {
-        select.addEventListener('change', updateAvailableQuestions);
-    });
-
-    // Asegurarse de que las opciones estén actualizadas cuando la página cargue
-    document.addEventListener('DOMContentLoaded', updateAvailableQuestions);
-</script>
+    </script>
 </body>
 </html>
