@@ -101,3 +101,7 @@ Route::get('/cambiar-contrasena', [RecuperarContrasenaController::class, 'mostra
 // Ruta para procesar el cambio de contraseña
 Route::post('/actualizar-contrasena', [RecuperarContrasenaController::class, 'actualizarContrasena'])->name('actualizar.contrasena');
 
+
+
+Route::get('/verificar', [AuthController::class, 'verificarCorreo'])->name('verificar.email');
+Route::get('/login', [AuthController::class, 'login'])->name('login');

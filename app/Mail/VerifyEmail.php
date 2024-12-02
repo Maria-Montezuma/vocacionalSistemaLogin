@@ -22,6 +22,7 @@ class VerifyEmail extends Mailable
         $this->token = $token;
     }
 
+
     public function envelope(): Envelope
     {
         return new Envelope(
@@ -32,7 +33,11 @@ class VerifyEmail extends Mailable
     public function content(): Content
     {
         return new Content(
-            view: 'emails.verify',
+            view: 'emails.verify', // Asegúrate de que esta vista exista
+            with: [
+                'usuario' => $this->usuario,  // Pasa los datos del usuario
+                'token' => $this->token,      // Pasa el token para la verificación
+            ]
         );
     }
 

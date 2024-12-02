@@ -217,17 +217,17 @@ class AuthController extends Controller
         ]);
     }
  // En tu AuthController, modifica esta parte:
-$token = Token::create([
-    'Usuarios_idUsuario' => $usuario->idUsuario,
-    'Token' => Str::random(64),
-    'TipoToken' => 'verify',  // Cambiado de 'email_verification' a 'verify'
-    'TiempoExpiracion' => now()->addHours(24),
-    'Usado' => 0
-]);
+    $token = Token::create([
+        'Usuarios_idUsuario' => $usuario->idUsuario,
+        'Token' => Str::random(64),
+        'TipoToken' => 'verify',  // 'verify' es adecuado para indicar que es un token de verificación de email
+        'TiempoExpiracion' => now()->addHours(24),  // Expira en 24 horas
+        'Usado' => 0,  // Indica que no ha sido utilizado aún
+    ]);
 
 // Enviar email
-// Enviar email
 Mail::to($usuario->CorreoUsuario)->send(new VerifyEmail($usuario, $token->Token));
+
 
 
     // Redirigir al formulario de registro o mostrar un mensaje de éxito
@@ -346,39 +346,51 @@ public function guardarRespuestasSeguridad(Request $request)
 // AuthController.php
 
 
-
-
 public function verificarCorreo(Request $request)
 {
     try {
+        // Validar que el token sea proporcionado
         $request->validate([
-            'CorreoUsuario' => 'required|email'
+            'token' => 'required|string',
         ]);
 
-        $usuario = Usuario::where('CorreoUsuario', $request->CorreoUsuario)->first();
+        // Buscar el token en la base de datos
+        $tokenRecord = Token::where('Token', $request->token)
+            ->where('TipoToken', 'verify')  // Asegúrate de que el token sea de tipo "verify"
+            ->where('Usado', 0)  // Verifica que no haya sido usado
+            ->first();
 
-        if ($usuario) {
-            // Si encuentra el usuario, guarda el ID en la sesión para usarlo después
-            session(['reset_email' => $usuario->CorreoUsuario]);
-            
-            return response()->json([
-                'status' => 'success',
-                'message' => 'Correo electrónico verificado correctamente'
-            ]);
+        if (!$tokenRecord) {
+            // Si no encontramos un token válido
+            return redirect()->route('login')->with('error', 'Token inválido o ya utilizado');
         }
 
-        return response()->json([
-            'status' => 'error',
-            'message' => 'No existe una cuenta con este correo electrónico'
+        // Verificar si el token ha expirado
+        if ($tokenRecord->TiempoExpiracion < now()) {
+            return redirect()->route('login')->with('error', 'El token ha expirado');
+        }
+
+        // Encontrar al usuario asociado con este token
+        $usuario = Usuario::find($tokenRecord->Usuarios_idUsuario);
+
+        if (!$usuario) {
+            return redirect()->route('login')->with('error', 'Usuario no encontrado');
+        }
+
+        // Actualizar el estado del usuario para marcarlo como verificado (asumiendo que tienes un campo "verificado")
+        $usuario->update([
+            'verificado' => 1,  // 1 significa verificado
         ]);
 
+        // Marcar el token como utilizado
+        $tokenRecord->update(['Usado' => 1]);
+
+        // Redirigir al login con un mensaje de éxito
+        return redirect()->route('login')->with('success', 'Correo electrónico verificado correctamente. Ahora puedes iniciar sesión.');
+        
     } catch (\Exception $e) {
-        return response()->json([
-            'status' => 'error',
-            'message' => 'Error al verificar el correo: ' . $e->getMessage()
-        ]);
+        return redirect()->route('login')->with('error', 'Error al verificar el correo: ' . $e->getMessage());
     }
 }
-
 
 }
