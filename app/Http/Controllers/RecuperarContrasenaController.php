@@ -318,36 +318,50 @@ public function mostrarFormularioPreguntas($userId)
     }
 }
 
-public function mostrarFormularioCambioContrasena($userId)
+public function mostrarFormularioCambioContrasena(Request $request)
     {
-        return view('cambio-contrasena', compact('userId'));
+        $idUsuario = $request->userId;
+        return view('cambio-contrasena', ['idUsuario' => $idUsuario]);
     }
 
     public function actualizarContrasena(Request $request)
-{
-    $request->validate([
-        'userId' => 'required',
-        'password' => 'required|min:8|confirmed',
-    ]);
+    {
+        $messages = [
+            'ContrasenaUsuario.required' => 'La contraseña es obligatoria',
+            'ContrasenaUsuario.min' => 'La contraseña debe tener al menos 8 caracteres',
+            'ContrasenaUsuario.confirmed' => 'Las contraseñas no coinciden',
+        ];
 
-    try {
-        $usuario = Usuario::find($request->userId);
-        
-        if (!$usuario) {
-            return redirect()->back()
-                ->with('error', 'Usuario no encontrado');
+        $request->validate([
+            'userId' => 'required',
+            'ContrasenaUsuario' => 'required|min:8|confirmed',
+        ], $messages);
+
+        try {
+            $usuario = Usuario::find($request->userId);
+            
+            if (!$usuario) {
+                return response()->json([
+                    'status' => 'error',
+                    'message' => 'Usuario no encontrado'
+                ]);
+            }
+
+            $usuario->ContrasenaUsuario = Hash::make($request->ContrasenaUsuario);
+            $usuario->save();
+
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Contraseña actualizada correctamente',
+                'redirect' => route('registro') // Ajusta esta ruta según tu configuración
+            ]);
+
+        } catch (\Exception $e) {
+            Log::error('Error al actualizar contraseña: ' . $e->getMessage());
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Error al actualizar la contraseña'
+            ]);
         }
-
-        $usuario->ContrasenaUsuario = Hash::make($request->password);
-        $usuario->save();
-
-        return redirect('/login')
-            ->with('success', 'Contraseña actualizada correctamente');
-
-    } catch (\Exception $e) {
-        logger('Error al actualizar contraseña: ' . $e->getMessage());
-        return redirect()->back()
-            ->with('error', 'Error al actualizar la contraseña');
     }
-}
 }

@@ -3,8 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>Cambiar Contraseña</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <style>
         .form-container {
             max-width: 500px;
@@ -26,38 +28,34 @@
         <div class="form-container">
             <h2 class="titulo">Cambiar Contraseña</h2>
 
-            @if(session('error'))
-                <div class="alert alert-danger">
-                    {{ session('error') }}
-                </div>
-            @endif
-
-            <form method="POST" action="{{ route('actualizar.contrasena') }}">
+            <form id="cambioContrasenaForm">
                 @csrf
-                <input type="hidden" name="userId" value="{{ $userId }}">
+                <input type="hidden" name="userId" value="{{ $idUsuario }}">
 
                 <div class="mb-3">
-                    <label for="password" class="form-label">Nueva Contraseña</label>
+                    <label for="ContrasenaUsuario" class="form-label">Nueva Contraseña</label>
                     <input 
                         type="password" 
-                        class="form-control @error('password') is-invalid @enderror" 
-                        id="password" 
+                        class="form-control @error('ContrasenaUsuario') is-invalid @enderror" 
+                        id="ContrasenaUsuario" 
                         name="ContrasenaUsuario" 
                         required
+                        minlength="8"
                     >
-                    @error('password')
+                    @error('ContrasenaUsuario')
                         <div class="invalid-feedback">{{ $message }}</div>
                     @enderror
                 </div>
 
                 <div class="mb-3">
-                    <label for="password_confirmation" class="form-label">Confirmar Contraseña</label>
+                    <label for="ContrasenaUsuario_confirmation" class="form-label">Confirmar Contraseña</label>
                     <input 
                         type="password" 
                         class="form-control" 
-                        id="password_confirmation" 
-                        name="password_confirmation" 
+                        id="ContrasenaUsuario_confirmation" 
+                        name="ContrasenaUsuario_confirmation" 
                         required
+                        minlength="8"
                     >
                 </div>
 
@@ -71,5 +69,50 @@
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <script>
+    document.getElementById('cambioContrasenaForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+
+        let formData = new FormData(this);
+
+        fetch("{{ route('actualizar.contrasena') }}", {
+            method: 'POST',
+            headers: {
+                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
+            },
+            body: formData
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.status === 'success') {
+                Swal.fire({
+                    icon: 'success',
+                    title: '¡Éxito!',
+                    text: 'Contraseña actualizada correctamente',
+                    showConfirmButton: false,
+                    timer: 1500
+                }).then(() => {
+                    // Cambia esta ruta por la ruta a la que quieres redirigir
+                    window.location.href = "{{ route('registro') }}";
+                });
+            } else {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: data.message || 'Hubo un error al actualizar la contraseña'
+                });
+            }
+        })
+        .catch(error => {
+            Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: 'Hubo un error al procesar tu solicitud'
+            });
+            console.error('Error:', error);
+        });
+    });
+    </script>
 </body>
 </html>

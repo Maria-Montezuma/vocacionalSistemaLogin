@@ -95,3 +95,9 @@ Route::get('/cambio-contrasena/{userId}', [RecuperarContrasenaController::class,
 Route::post('/actualizar-contrasena', [RecuperarContrasenaController::class, 'actualizarContrasena'])->name('actualizar.contrasena');
 
 
+// Ruta para mostrar el formulario
+Route::get('/cambiar-contrasena', [RecuperarContrasenaController::class, 'mostrarFormularioCambioContrasena'])->name('mostrar.cambio.contrasena');
+
+// Ruta para procesar el cambio de contraseña
+Route::post('/actualizar-contrasena', [RecuperarContrasenaController::class, 'actualizarContrasena'])->name('actualizar.contrasena');
+
