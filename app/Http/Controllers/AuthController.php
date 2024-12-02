@@ -310,19 +310,19 @@ public function verificarCorreo(Request $request)
 
         if (!$tokenRecord) {
             // Si no encontramos un token válido
-            return redirect()->route('login')->with('error', 'Token inválido o ya utilizado');
+            return redirect()->route('registro')->with('error', 'Token inválido o ya utilizado');
         }
 
         // Verificar si el token ha expirado
         if ($tokenRecord->TiempoExpiracion < now()) {
-            return redirect()->route('login')->with('error', 'El token ha expirado');
+            return redirect()->route('registro')->with('error', 'El token ha expirado');
         }
 
         // Encontrar al usuario asociado con este token
         $usuario = Usuario::find($tokenRecord->Usuarios_idUsuario);
 
         if (!$usuario) {
-            return redirect()->route('login')->with('error', 'Usuario no encontrado');
+            return redirect()->route('registro')->with('error', 'Usuario no encontrado');
         }
 
         // Actualizar el estado del usuario para marcarlo como verificado (asumiendo que tienes un campo "verificado")
@@ -334,10 +334,10 @@ public function verificarCorreo(Request $request)
         $tokenRecord->update(['Usado' => 1]);
 
         // Redirigir al login con un mensaje de éxito
-        return redirect()->route('login')->with('success', 'Correo electrónico verificado correctamente. Ahora puedes iniciar sesión.');
+        return redirect()->route('registro')->with('success', 'Correo electrónico verificado correctamente. Ahora puedes iniciar sesión.');
         
     } catch (\Exception $e) {
-        return redirect()->route('login')->with('error', 'Error al verificar el correo: ' . $e->getMessage());
+        return redirect()->route('registro')->with('error', 'Error al verificar el correo: ' . $e->getMessage());
     }
 }
 

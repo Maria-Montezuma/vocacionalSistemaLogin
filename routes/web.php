@@ -14,10 +14,6 @@ Route::post('/', [AuthController::class, 'showRegistrationForm'])->name('registr
 Route::post('registro', [AuthController::class, 'register'])->name('registro.submit');
 Route::get('/registro', [AuthController::class, 'showRegistrationForm'])->name('registro');
 
-// // Mostrar formulario de login
-// Route::get('login', [AuthController::class, 'showLoginForm'])->name('login');
-// Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
-
 // Procesar el login
 Route::get('login', [AuthController::class, 'login'])->name('login.submit');
 Route::post('login', [AuthController::class, 'login'])->name('login.submit');
@@ -104,4 +100,4 @@ Route::post('/actualizar-contrasena', [RecuperarContrasenaController::class, 'ac
 
 
 Route::get('/verificar', [AuthController::class, 'verificarCorreo'])->name('verificar.email');
-Route::get('/login', [AuthController::class, 'login'])->name('login');
+
