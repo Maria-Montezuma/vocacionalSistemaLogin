@@ -104,7 +104,7 @@ class RecuperarContrasenaController extends Controller
 {
     $validated = $request->validate([
         'token' => 'required|string',
-        'password' => 'required|string|min:8|confirmed',
+        'ContrasenaUsuario' => 'required|string|min:8|confirmed', // Cambiado
     ]);
 
     $token = Token::where('Token', $validated['token'])
@@ -119,7 +119,8 @@ class RecuperarContrasenaController extends Controller
 
     // Actualiza la contraseña del usuario
     $user = Usuario::find($token->Usuarios_idUsuario);
-    $user->update(['password' => bcrypt($validated['password'])]);
+    $user->ContrasenaUsuario = Hash::make($validated['ContrasenaUsuario']); // Cambiado
+    $user->save();
 
     // Marca el token como usado
     $token->update(['Usado' => 1]);

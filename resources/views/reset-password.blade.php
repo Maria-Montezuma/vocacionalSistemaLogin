@@ -5,6 +5,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Agregamos SweetAlert2 -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
 <body>
     <div class="container mt-5">
@@ -50,11 +52,28 @@
                         _token: '{{ csrf_token() }}'
                     },
                     success: function(response) {
-                        alert('Contraseña actualizada correctamente');
-                        window.location.href = '/login';
+                        // Usamos SweetAlert2 para mostrar un mensaje de éxito
+                        Swal.fire({
+                            icon: 'success',
+                            title: '¡Contraseña Actualizada!',
+                            text: 'Tu contraseña ha sido restablecida exitosamente.',
+                            confirmButtonText: 'Iniciar Sesión',
+                            allowOutsideClick: false
+                        }).then((result) => {
+                            if (result.isConfirmed) {
+                                // Redirigimos a la página de registro/login
+                                window.location.href = '/registro';
+                            }
+                        });
                     },
                     error: function(xhr) {
-                        alert('Error al actualizar la contraseña');
+                        // Usamos SweetAlert2 para mostrar un mensaje de error
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error',
+                            text: 'No se pudo actualizar la contraseña. Por favor, intenta nuevamente.',
+                            confirmButtonText: 'Aceptar'
+                        });
                     }
                 });
             });
