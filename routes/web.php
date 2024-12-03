@@ -11,7 +11,7 @@ use App\Http\Controllers\RecuperarContrasenaController;
 //  Rutas de Registro
 Route::get('/', [RegistroController::class, 'showRegistrationForm'])->name('registro');
 Route::post('/', [RegistroController::class, 'showRegistrationForm'])->name('registro.submit');
-Route::post('registro', [AuthController::class, 'register'])->name('registro.submit');
+Route::post('registro', [RegistroController::class, 'register'])->name('registro.submit');
 Route::get('/registro', [RegistroController::class, 'showRegistrationForm'])->name('registro');
 
 
