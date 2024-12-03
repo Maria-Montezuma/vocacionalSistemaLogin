@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Models\Usuario;
-use App\Models\Preguntasseguridad;
 use App\Models\Respuestasseguridad;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
@@ -104,7 +103,7 @@ class RecuperarContrasenaController extends Controller
 {
     $validated = $request->validate([
         'token' => 'required|string',
-        'ContrasenaUsuario' => 'required|string|min:8|confirmed', // Cambiado
+        'ContrasenaUsuario' => 'required|string|min:8|confirmed', 
     ]);
 
     $token = Token::where('Token', $validated['token'])
@@ -117,13 +116,10 @@ class RecuperarContrasenaController extends Controller
         return back()->withErrors(['token' => 'El token es inválido o ha expirado.']);
     }
 
-    // Actualiza la contraseña del usuario
     $user = Usuario::find($token->Usuarios_idUsuario);
-    $user->ContrasenaUsuario = Hash::make($validated['ContrasenaUsuario']); // Cambiado
+    $user->ContrasenaUsuario = Hash::make($validated['ContrasenaUsuario']);
     $user->save();
 
-    // Marca el token como usado
-    $token->update(['Usado' => 1]);
 
     return redirect()->route('registro')->with('status', 'Contraseña restablecida correctamente.');
 }
@@ -190,7 +186,7 @@ public function mostrarPreguntasSeguridad($userId)
                 'respuestasseguridad.idRespuestasSeguridad',
                 'respuestasseguridad.PreguntasSeguridad_idPreguntasSeguridad',
                 'preguntasseguridad.PreguntasSeguridad',
-                'respuestasseguridad.Respuesta'  // Agregamos la respuesta de la BD
+                'respuestasseguridad.Respuesta' 
             )
             ->join('preguntasseguridad', 'respuestasseguridad.PreguntasSeguridad_idPreguntasSeguridad', '=', 'preguntasseguridad.idPreguntasSeguridad')
             ->where('respuestasseguridad.Usuarios_idUsuario', $userId)
@@ -208,8 +204,8 @@ public function mostrarPreguntasSeguridad($userId)
                 'idRespuesta' => $respuesta->idRespuestasSeguridad,
                 'pregunta' => $respuesta->PreguntasSeguridad,
                 'idPregunta' => $respuesta->PreguntasSeguridad_idPreguntasSeguridad,
-                'respuestaCorrecta' => $respuesta->Respuesta, // La respuesta almacenada en la BD
-                'respuestaUsuario' => ''  // Campo vacío para que el usuario ingrese su respuesta
+                'respuestaCorrecta' => $respuesta->Respuesta, 
+                'respuestaUsuario' => ''  
             ];
         });
 
@@ -348,7 +344,7 @@ public function mostrarFormularioCambioContrasena(Request $request)
             return response()->json([
                 'status' => 'success',
                 'message' => 'Contraseña actualizada correctamente',
-                'redirect' => route('registro') // Ajusta esta ruta según tu configuración
+                'redirect' => route('registro') 
             ]);
 
         } catch (\Exception $e) {

@@ -52,7 +52,6 @@
                         _token: '{{ csrf_token() }}'
                     },
                     success: function(response) {
-                        // Usamos SweetAlert2 para mostrar un mensaje de éxito
                         Swal.fire({
                             icon: 'success',
                             title: '¡Contraseña Actualizada!',
@@ -61,7 +60,7 @@
                             allowOutsideClick: false
                         }).then((result) => {
                             if (result.isConfirmed) {
-                                // Redirigimos a la página de registro/login
+   
                                 window.location.href = '/registro';
                             }
                         });
