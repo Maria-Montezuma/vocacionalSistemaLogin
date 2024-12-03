@@ -55,11 +55,10 @@ Route::get('/reset-password/{token}', [RecuperarContrasenaController::class, 'sh
 // Procesar el reset
 Route::post('/reset-password', [RecuperarContrasenaController::class, 'resetPassword'])
     ->name('password.update');
-
-    
-
-
+  
     Route::post('/respuesta-seguridad/store', [RespuestaSeguridadController::class, 'store'])->name('respuesta-seguridad.store');
+
+    Route::get('/reset-password/{token}', [RecuperarContrasenaController::class, 'showResetForm'])->name('password.reset');
 
 
 
@@ -100,4 +99,17 @@ Route::post('/actualizar-contrasena', [RecuperarContrasenaController::class, 'ac
 
 
 Route::get('/verificar', [AuthController::class, 'verificarCorreo'])->name('verificar.email');
+
+
+
+
+// Mostrar formulario de restablecimiento de contraseña
+Route::get('/reset-password/{token}', [RecuperarContrasenaController::class, 'showResetForm'])
+    ->name('password.reset');
+
+// Procesar el restablecimiento de contraseña
+Route::post('/reset-password', [RecuperarContrasenaController::class, 'resetPassword'])
+    ->name('password.update');
+
+
 

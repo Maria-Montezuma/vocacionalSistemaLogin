@@ -57,7 +57,7 @@ class RecuperarContrasenaController extends Controller
                 'Usuarios_idUsuario' => $usuario->idUsuario,
                 'Token' => $tokenString,
                 'TipoToken' => 'reset',
-                'FechaExpiracion' => Carbon::now()->addHours(1),
+                'TiempoExpiracion' => Carbon::now()->addHours(1),
                 'Usado' => 0
             ]);
 
@@ -84,7 +84,7 @@ class RecuperarContrasenaController extends Controller
         $tokenRecord = Token::where('Token', $token)
             ->where('TipoToken', 'reset')
             ->where('Usado', 0)
-            ->where('FechaExpiracion', '>', Carbon::now())
+            ->where('TiempoExpiracion', '>', Carbon::now())
             ->first();
 
         if (!$tokenRecord) {
@@ -101,44 +101,38 @@ class RecuperarContrasenaController extends Controller
     }
 
     public function resetPassword(Request $request)
-    {
-        $request->validate([
-            'token' => 'required',
-            'ContrasenaUsuario' => 'required|min:8|confirmed'
-        ]);
+{
+    $validated = $request->validate([
+        'token' => 'required|string',
+        'password' => 'required|string|min:8|confirmed',
+    ]);
 
-        $tokenRecord = Token::where('Token', $request->token)
-            ->where('TipoToken', 'reset')
-            ->where('Usado', 0)
-            ->where('FechaExpiracion', '>', Carbon::now())
-            ->first();
+    $token = Token::where('Token', $validated['token'])
+        ->where('TipoToken', 'reset')
+        ->where('Usado', 0)
+        ->where('TiempoExpiracion', '>', now())
+        ->first();
 
-        if (!$tokenRecord) {
-            return response()->json([
-                'status' => 'error',
-                'message' => 'Token inválido o expirado'
-            ], 400);
-        }
-
-        $usuario = Usuario::find($tokenRecord->Usuarios_idUsuario);
-        $usuario->ContrasenaUsuario = bcrypt($request->ContrasenaUsuario);
-        $usuario->save();
-
-        $tokenRecord->Usado = 1;
-        $tokenRecord->save();
-
-        return response()->json([
-            'status' => 'success',
-            'message' => 'Contraseña actualizada correctamente'
-        ]);
+    if (!$token) {
+        return back()->withErrors(['token' => 'El token es inválido o ha expirado.']);
     }
+
+    // Actualiza la contraseña del usuario
+    $user = Usuario::find($token->Usuarios_idUsuario);
+    $user->update(['password' => bcrypt($validated['password'])]);
+
+    // Marca el token como usado
+    $token->update(['Usado' => 1]);
+
+    return redirect()->route('registro')->with('status', 'Contraseña restablecida correctamente.');
+}
 
     public function showResetForm($token)
     {
         $tokenRecord = Token::where('Token', $token)
             ->where('TipoToken', 'reset')
             ->where('Usado', 0)
-            ->where('FechaExpiracion', '>', Carbon::now())
+            ->where('TiempoExpiracion', '>', Carbon::now())
             ->first();
 
         if (!$tokenRecord) {

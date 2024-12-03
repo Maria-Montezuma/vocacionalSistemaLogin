@@ -32,7 +32,7 @@ class RecuperacionContrasena extends Mailable
 
     public function build()
     {
-        $resetUrl = 'https://four-shoes-exist.loca.lt/reset-password/' . $this->token;
+        $resetUrl = 'http://127.0.0.1:8000/reset-password/' . $this->token;
         return $this->view('emails.recuperacion-contrasena')
                     ->subject('Recuperación de Contraseña')
                     ->with([
