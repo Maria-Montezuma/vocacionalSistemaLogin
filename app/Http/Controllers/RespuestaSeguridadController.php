@@ -43,6 +43,7 @@ class RespuestaSeguridadController extends Controller
 
         return redirect()->back()->with('success', 'Respuestas actualizadas exitosamente');
     }
+
     public function verificarRespuesta(Request $request)
     {
         $request->validate([
@@ -62,7 +63,7 @@ class RespuestaSeguridadController extends Controller
             ], 404);
         }
 
-        if(Hash::check($request->respuesta, $respuestaSeguridad->RespuestaSeguridad_hash)) {
+       if (Hash::check($request->respuesta, $respuestaSeguridad->RespuestaSeguridad_hash)) {
             return response()->json([
                 'message' => 'Respuesta correcta',
                 'status' => 200
@@ -82,8 +83,6 @@ class RespuestaSeguridadController extends Controller
         ->with('preguntaSeguridad')
         ->get();
     
-    // Agrega esta línea para debug
-    // dd($respuestasSeguridad);
     
     return view('perfil.show', [
         'usuario' => $usuario,

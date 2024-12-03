@@ -19,8 +19,6 @@
                 <h2>Iniciar Sesión</h2>
                 <form action="{{ route('login.submit') }}" method="POST">
                 @csrf
-                     
-                    <!-- Resto del formulario de login permanece igual -->
                     <div class="col">
                         <label for="login-email">
                             <i class="fas fa-envelope"></i> Correo Electrónico:
@@ -65,8 +63,6 @@
             <h2>Crear Cuenta</h2>
             <form action="{{ route('registro.submit') }}" method="POST">
             @csrf
-                    
-                    <!-- El resto del formulario de registro permanece igual -->
                     <div class="row">
                         <div class="col">
                             <label for="nombres">
@@ -413,10 +409,10 @@ document.addEventListener('DOMContentLoaded', function() {
 @if(session('alert'))
     <script>
         Swal.fire({
-            icon: "{{ session('alert.type') }}", // success, error, warning, info
+            icon: "{{ session('alert.type') }}", 
             title: "{{ session('alert.message') }}",
             showConfirmButton: false,
-            timer: 3000 // Tiempo en milisegundos
+            timer: 3000 
         });
     </script>
 @endif
@@ -431,10 +427,6 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     </script>
 @endif
-
-
-
-
 
 </body>
 </html>

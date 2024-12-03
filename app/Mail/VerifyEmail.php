@@ -33,10 +33,10 @@ class VerifyEmail extends Mailable
     public function content(): Content
     {
         return new Content(
-            view: 'emails.verify', // Asegúrate de que esta vista exista
+            view: 'emails.verify',
             with: [
-                'usuario' => $this->usuario,  // Pasa los datos del usuario
-                'token' => $this->token,      // Pasa el token para la verificación
+                'usuario' => $this->usuario,  
+                'token' => $this->token,   
             ]
         );
     }
