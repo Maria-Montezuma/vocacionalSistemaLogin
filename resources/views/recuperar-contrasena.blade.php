@@ -5,93 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>Recuperar Contraseña</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-    <style>
-        :root {
-            --orange-primary: #e2740e;
-            --orange-hover: #f79840;
-        }
-
-        body {
-            background-color: #f8f9fa;
-            height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .recovery-container {
-            background: white;
-            padding: 2rem;
-            border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0,0,0,0.1);
-            max-width: 400px;
-            width: 100%;
-        }
-
-        .form-group {
-            margin-bottom: 1rem;
-        }
-
-        .btn-primary {
-            width: 100%;
-            padding: 10px;
-            margin-top: 1rem;
-            background-color: #e2740e;
-            border-color: var(--orange-primary);
-        }
-
-        .btn-primary:hover {
-            background-color: var(--orange-hover);
-            border-color: var(--orange-hover);
-            background: #e2740e;
-        }
-
-        .recovery-options {
-            display: flex;
-            gap: 1rem;
-            margin-bottom: 1rem;
-        }
-
-        .recovery-option {
-            flex: 1;
-            text-align: center;
-            padding: 10px;
-            border: 1px solid #dee2e6;
-            border-radius: 5px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        .recovery-option:hover {
-            border-color: var(--orange-primary);
-        }
-
-        .recovery-option.active {
-            background-color: var(--orange-primary);
-            border-color: var(--orange-primary);
-            color: white;
-        }
-
-        a {
-            color: var(--orange-primary);
-            text-decoration: none;
-        }
-
-        a:hover {
-            color: var(--orange-hover);
-        }
-
-        .form-control:focus {
-            border-color: var(--orange-primary);
-            box-shadow: 0 0 0 0.25rem rgba(255, 107, 0, 0.25);
-        }
-    </style>
+    <link rel="stylesheet" href="{{ asset('css/cambio-contrasena.css') }}">
 </head>
 <body>
-    <div class="recovery-container">
-        <h2 class="text-center mb-4">Recuperar Contraseña</h2>
-        
+<div class="container mt-5">
+    <div class="recovery-container form-container">
+                <h2 class="titulo">Recuperar Contraseña</h2>
         <div class="recovery-options">
             <div class="recovery-option active" onclick="cambiarMetodo('email')">
                 Por correo electrónico
@@ -135,7 +54,7 @@
             <a href="{{ route('registro') }}">Volver al inicio de sesión</a>
         </div>
     </div>
-
+</div>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
         function cambiarMetodo(metodo) {
