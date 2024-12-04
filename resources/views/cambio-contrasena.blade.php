@@ -53,48 +53,11 @@
         </div>
     </div>
     <script>
-    document.getElementById('cambioContrasenaForm').addEventListener('submit', function(e) {
-        e.preventDefault();
+    var actualizarContrasenaUrl = "{{ route('actualizar.contrasena') }}";
+    var registroUrl = "{{ route('registro') }}";
+</script>
+<script src="{{ asset('/js/cambio-contrasena.js') }}"></script>
 
-        let formData = new FormData(this);
-
-        fetch("{{ route('actualizar.contrasena') }}", {
-            method: 'POST',
-            headers: {
-                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
-            },
-            body: formData
-        })
-        .then(response => response.json())
-        .then(data => {
-            if (data.status === 'success') {
-                Swal.fire({
-                    icon: 'success',
-                    title: '¡Éxito!',
-                    text: 'Contraseña actualizada correctamente',
-                    showConfirmButton: false,
-                    timer: 1500
-                }).then(() => {
-                    // Cambia esta ruta por la ruta a la que quieres redirigir
-                    window.location.href = "{{ route('registro') }}";
-                });
-            } else {
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Error',
-                    text: data.message || 'Hubo un error al actualizar la contraseña'
-                });
-            }
-        })
-        .catch(error => {
-            Swal.fire({
-                icon: 'error',
-                title: 'Error',
-                text: 'Hubo un error al procesar tu solicitud'
-            });
-            console.error('Error:', error);
-        });
-    });
-    </script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

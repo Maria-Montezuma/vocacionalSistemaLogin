@@ -4,6 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="{{ asset('css/perfil.css') }}"> 
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+    <script src="{{ asset('/js/perfil.js') }}"></script>
     <title>Mi Perfil</title>
 </head>
 <body>
@@ -118,47 +121,5 @@
             </div>
         </div>
     </div>
-
-    <script>
-        document.getElementById('toggle-questions').addEventListener('click', function() {
-            const questionsSection = document.getElementById('questions-section');
-            questionsSection.style.display = questionsSection.style.display === 'none' ? 'block' : 'none';
-        });
-
-        const selects = document.querySelectorAll('.question-select');
-        
-        function validateQuestions() {
-            const selectedValues = new Set();
-            let isValid = true;
-            
-            document.querySelectorAll('.error-message').forEach(error => {
-                error.style.display = 'none';
-                error.textContent = '';
-            });
-
-            selects.forEach((select, index) => {
-                if (select.value) {
-                    if (selectedValues.has(select.value)) {
-                        document.getElementById(`error-pregunta${index + 1}`).textContent = 'Por favor seleccione preguntas diferentes';
-                        document.getElementById(`error-pregunta${index + 1}`).style.display = 'block';
-                        isValid = false;
-                    }
-                    selectedValues.add(select.value);
-                }
-            });
-
-            return isValid;
-        }
-
-        document.getElementById('security-questions-form').addEventListener('submit', function(e) {
-            if (!validateQuestions()) {
-                e.preventDefault();
-            }
-        });
-
-        selects.forEach(select => {
-            select.addEventListener('change', validateQuestions);
-        });
-    </script>
 </body>
 </html>
