@@ -24,8 +24,8 @@ body {
 .container {
     position: relative;
     width: 100%;
-    max-width: 950px; /* Reducido un poco el ancho */
-    height: 480px;  /* Reducida ligeramente la altura */
+    max-width: 950px; 
+    height: 480px;  
     margin: 20px auto;
     box-shadow: 4px 4px 15px rgba(0, 0, 0, 0.291);
 }
@@ -54,7 +54,7 @@ body {
     display: block;
     flex-direction: column;
     justify-content: center;
-    padding: 20px;  /* Reducido aún más el padding */
+    padding: 20px; 
     transition: all 0.6s ease-in-out;
     overflow-y: hidden;
 }
@@ -62,6 +62,10 @@ body {
 .signin-form {
     z-index: 2;
     opacity: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
 }
 
 .signup-form {
@@ -88,8 +92,8 @@ body {
     background: #fff4e3;
     display: flex;
     flex-direction: column;
-    justify-content: flex-start; /* Distribuir los elementos verticalmente */
-    align-items: center; /* Alinear los elementos al centro */
+    justify-content: flex-start; 
+    align-items: center; 
     padding: 40px;
     text-align: center;
     transition: all 0.6s ease-in-out;
@@ -125,10 +129,10 @@ body {
     z-index: 2;
 }
 
-/* Estilos para títulos y otros elementos */
+
 h2 {
     text-align: center;
-    font-size: 1.5em; /* Mantengo el tamaño del título */
+    font-size: 1.5em; 
     margin-bottom: 10px;
     color: #333;
 }
@@ -141,7 +145,7 @@ h2 {
 .info-container h2 {
     color: #292929;
     margin-bottom: 5px; 
-    text-align: center; /* Asegura que el título esté alineado a la izquierda */
+    text-align: center;
 }
 
 
@@ -274,7 +278,6 @@ button:hover {
         position: relative;
     }
 
-    /* Mejora para el formulario */
     .form {
         padding: 20px;
         overflow-y: auto;
@@ -302,15 +305,11 @@ button:hover {
 }
 
 
-
-
-
-
 .mobile-only {
     display: none;
 }
 
-/* Estilos responsivos para pantallas pequeñas */
+
 @media screen and (max-width: 768px) {
     .container {
         height: 100%;
@@ -366,13 +365,12 @@ button:hover {
     }
 }
 
-/* Estilos para dispositivos móviles */
 .mobile-only {
     display: none;
 }
 
 @media screen and (max-width: 768px) {
-    /* Mostrar los botones solo en móviles */
+  
     .boton-mobile{
         background: #e2740e;
     }
@@ -404,19 +402,19 @@ button:hover {
 }
 
 .form-wrapper {
-    width: 600px;  /* Ancho fijo */
-    height: 600px; /* Alto fijo para hacerlo cuadrado */
+    width: 600px;  
+    height: 600px; 
     padding: 20px;
-    background-color: #ffffff;  /* Fondo blanco */
+    background-color: #ffffff;  
     border-radius: 8px;
-    box-shadow: #e2740e; /* Sombra suave */
+    box-shadow: #e2740e; 
     display: flex;
     flex-direction: column;
     justify-content: space-between;
 }
 
 
-/* Menor espacio entre los pasos */
+
 .step {
     display: none;
 }
@@ -429,28 +427,27 @@ button:hover {
     margin-bottom: 12px;
 }
 
-/* Ajuste de los botones en un contenedor más pequeño */
+
 .step {
-    height: auto;  /* Sin scroll, altura ajustable */
+    height: auto;  
 }
 
-/* Estilo para los radio buttons */
 .step label {
     font-size: 1em;
     margin: 10px 0;
     display: flex;
     align-items: center;
-    gap: 8px; /* Add small gap between radio and text */
-    cursor: pointer; /* Add pointer cursor for better UX */
+    gap: 8px; 
+    cursor: pointer; 
 }
 
 .step input[type="radio"] {
-    width: 16px; /* Set specific size */
-    height: 16px; /* Set specific size */
-    accent-color: #e2740e; /* Match your theme color */
+    width: 16px; 
+    height: 16px; 
+    accent-color: #e2740e; 
 }
 
-/* Add hover effect */
+
 .step label:hover {
     color: #e2740e;
 }
@@ -553,13 +550,13 @@ h3 {
   .line-with-text::before,
   .line-with-text::after {
     content: "";
-    flex: 1; /* Hace que las líneas ocupen espacio flexible */
-    border-bottom: 1px solid #ccc; /* Estilo de la línea */
-    margin: 0 10px; /* Espaciado entre las líneas y el texto */
+    flex: 1; 
+    border-bottom: 1px solid #ccc; 
+    margin: 0 10px; 
   }
 
   .info-text {
-    white-space: nowrap; /* Asegura que el texto no se divida en varias líneas */
+    white-space: nowrap; 
     font-size: 14px;
     color: #666;}
 

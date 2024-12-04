@@ -1,4 +1,4 @@
-/* Reseteo de márgenes y paddings */
+
 * {
     margin: 0;
     padding: 0;
@@ -102,24 +102,23 @@ body {
     background-color: #f79840;
 }
 
-/* Contenido del perfil */
 .profile-content {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
     gap: 1.5rem;
 }
 
-/* Tarjetas de información */
+
 .card {
     background: white;
-    border-radius: 0.8rem; /* Reducido el border-radius */
-    padding: .8rem;  /* Reducido el padding */
-    box-shadow: 0 4px 15px #cdbdbd; /* Reducido el tamaño de la sombra */
-    max-width: 380px; /* Limitar el ancho máximo de las tarjetas */
+    border-radius: 0.8rem; 
+    padding: .8rem; 
+    box-shadow: 0 4px 15px #cdbdbd; 
+    max-width: 380px; 
 }
 
 .card-title {
-    font-size: 0.9rem;  /* Reducido el tamaño */
+    font-size: 0.9rem;  
     color: #666;
     font-weight: 600;
     margin-bottom: 1rem;
@@ -128,7 +127,7 @@ body {
     gap: 0.5rem;
 }
 
-/* Información de contacto */
+
 .contact-info {
     display: grid;
     gap: 1rem;
