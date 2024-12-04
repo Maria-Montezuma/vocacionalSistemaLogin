@@ -64,3 +64,9 @@ If you discover a security vulnerability within Laravel, please send an e-mail t
 ## License
 
 The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+
+
+<!-- Insert de la base de datos necesario 
+        INSERT INTO `generos`(`idGenero`, `NombreGenero`) VALUES (1,'Femenino'), (2,'Masculino');
+        INSERT INTO `nacionalidades`(`idNacionalidad`, `NombreNacionalidad`) VALUES (1,'Venezolano'), (2, 'Extranjero')
+        INSERT INTO `preguntasseguridad`(`idPreguntasSeguridad`, `PreguntasSeguridad`) VALUES (1,'Cual es tu libro favorito?'),(2,'Cual es tu lugar favorito?'),(3,'Cual es tu color favorito?'),(4,'Cual es el nombre de tu madre?'),(5,'Cual es el nombre de tu padre?'); -->
