@@ -6,12 +6,17 @@
     <title>Verificación de correo electrónico</title>
 </head>
 <body>
-    <h1>Hola {{ $usuario->NombreUsuario }}!</h1>
-    <p>Para completar tu registro, por favor haz clic en el siguiente enlace para verificar tu correo electrónico:</p>
-    <p>
-        <a href="{{ url('/verificar?token=' . $token) }}">Verificar mi correo electrónico</a>
+    <h1>Verificacion de Correo Electronico</h1>
+    <p>Estimado/a {{ $usuario->NombreUsuario }}!</p>
+
+    <p>Gracias por registrarte en nuestro sitio web. Para completar el proceso y activar tu cuenta, por fabor verifica tu correo electrónico haciendo clic en el siguiente enlace:</p>
+    <p style="text-align: center;">
+        <a href="{{ url('/verificar?token=' . $token) }}" style="background-color: #e2740e; color:  #ffffff; padding: 14px 20px; text-align: center; text-decoration: none; border-radius: 5px; display: inline-block;">
+            Verificar mi correo electrónico</a>
     </p>
-    <p>Este enlace expirará en 24 horas.</p>
-    <p>Si no te has registrado en nuestro sitio, por favor ignora este mensaje.</p>
+    <p>Recuerda que este enlace tiene una validez de 24 horas. Si no realizaste este registro, por favor ignora este mensaje.</p>
+    
+    <p>Saludos cordiales,</p>
+    <p>El equipo de OrientaPro</p>
 </body>
 </html>

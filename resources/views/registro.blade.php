@@ -33,24 +33,6 @@
                         <a class="a" href="{{ route('recuperar-contraseña') }}">¿Olvidaste tu contraseña?</a>
                     </div>
                     <button class="boton-mobile" type="submit">Iniciar Sesión</button>
-                    <div class="line-with-text">
-                    <span class="info-text">O accede con tus redes sociales</span>
-                    </div>
-
-                    <div class="social-buttons">
-                        <button type="button" class="social-button">
-                            <i class="fab fa-facebook-f"></i> Facebook
-                        </button>
-                        <button type="button" class="social-button">
-                            <i class="fab fa-instagram"></i> Instagram
-                        </button>
-                        <button type="button" class="social-button">
-                            <i class="fab fa-twitter"></i> Twitter
-                        </button>
-                        <button type="button" class="social-button">
-                            <i class="fab fa-tiktok"></i> TikTok
-                        </button>
-                    </div>  
 
                     <div class="mobile-create-account mobile-only">
                         <button type="button" class="toggle-button" onclick="toggleForm()">Crear cuenta</button>
