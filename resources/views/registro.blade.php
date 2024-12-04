@@ -241,6 +241,18 @@
         });
     </script>
 @endif
+
+@if(session('verify_success'))
+    <script>
+        Swal.fire({
+            icon: 'success',
+            title: '¡Verificación Exitosa!',
+            text: 'Tu correo ha sido verificado. Ahora puedes iniciar sesión.',
+            confirmButtonText: 'Iniciar sesión'
+        });
+    </script>
+@endif
+
 @if(session('alert'))
     <script>
         Swal.fire({

@@ -55,4 +55,19 @@ document.addEventListener('DOMContentLoaded', function() {
     selects.forEach(select => {
         select.addEventListener('change', validateQuestions);
     });
+
+    document.getElementById('cancelBtn').addEventListener('click', function() {
+        const questionsSection = document.getElementById('questions-section');
+        questionsSection.style.display = 'none';
+        
+        const form = document.getElementById('security-questions-form');
+        form.reset(); 
+   
+        document.querySelectorAll('.error-message').forEach(error => {
+            error.style.display = 'none';
+            error.textContent = '';
+        });
+        enableAllQuestions();
+    });
+
 });

@@ -232,7 +232,7 @@ public function verificarCorreo(Request $request)
 
         $tokenRecord->update(['Usado' => 1]);
 
-        return redirect()->route('registro')->with('success', 'Correo electrónico verificado correctamente. Ahora puedes iniciar sesión.');
+        return redirect()->route('registro')->with('verify_success', 'Correo electrónico verificado correctamente. Ahora puedes iniciar sesión.');
         
     } catch (\Exception $e) {
         return redirect()->route('registro')->with('error', 'Error al verificar el correo: ' . $e->getMessage());
